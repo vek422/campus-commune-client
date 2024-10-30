@@ -6,7 +6,6 @@ import { Thread } from "@/components/Thread/Thread";
 import { CreateThread } from "@/components/Thread/CreateThread";
 import { ThreadCardLoader } from "@/components/Loaders/ThreadCardLoader";
 import { useEffect, useState } from "react";
-import { useSocket } from "@/hooks/useSocket";
 import { BACKEND_BASE_URL } from "@/config/config";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,21 +19,6 @@ export default function Channel() {
       channelId,
     });
   const [message, setMessage] = useState("");
-
-  const {
-    socket,
-    error: socketError,
-    isConnected,
-  } = useSocket({
-    url: BACKEND_BASE_URL,
-    communeId: communeId || "",
-    options: { transports: ["websocket"] },
-  });
-  useEffect(() => {
-    socket?.on("new-thread", (thread) => {
-      setThreads((prev) => [thread, ...prev]);
-    });
-  }, [socket]);
 
   useEffect(() => {
     fetchChannel();
@@ -65,18 +49,7 @@ export default function Channel() {
         </div>
       </div>
       <div className="w-1/4 h-screen px-10 py-5">
-        <CreateThread socket={socket} setThreads={setThreads} />
-        <div>
-          <Input onChange={(e) => setMessage(e.target.value)} value={message} />
-          <Button
-            onClick={() => {
-              socket?.emit("message", "someid", message);
-              setMessage("");
-            }}
-          >
-            Send
-          </Button>
-        </div>
+        <CreateThread setThreads={setThreads} />
       </div>
     </div>
   );

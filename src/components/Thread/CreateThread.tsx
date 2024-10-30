@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export const CreateThread = ({ socket, setThreads }) => {
+export const CreateThread = ({ setThreads }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeDialog = () => {
@@ -28,7 +28,6 @@ export const CreateThread = ({ socket, setThreads }) => {
           <div className="w-full">
             <CreateThreadForm
               closeDialog={closeDialog}
-              socket={socket}
               setThreads={setThreads}
             />
           </div>

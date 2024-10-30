@@ -34,18 +34,15 @@ const schema = z.object({
   videos: z.any().optional(),
 });
 
-export function CreateThreadForm({ closeDialog, socket, setThreads }) {
+export function CreateThreadForm({ closeDialog, setThreads }) {
   const { error, thread, createThread, isLoading } = useCreateThread();
   const { channelId } = useParams();
   const [commune] = useOutletContext();
   const onSubmit = (values: typeof initialValues) => {
-    createThread({ ...values, channelId });
+    createThread({ ...values, channelId, communeId: commune?._id });
   };
   useEffect(() => {
     if (thread) {
-      socket.emit("new-thread", commune._id, thread);
-      console.log(thread);
-      setThreads((prev) => [thread, ...prev]);
       closeDialog();
     }
   }, [thread]);

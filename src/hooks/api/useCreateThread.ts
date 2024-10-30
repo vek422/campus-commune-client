@@ -22,6 +22,7 @@ export const useCreateThread = () => {
             formData.append('title', values.title)
             formData.append('content', values.content)
             formData.append('createdBy', user._id)
+            formData.append('communeId', values.communeId)
 
             for (const image of values.images) {
                 formData.append('images', image)
