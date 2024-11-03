@@ -9,10 +9,10 @@ export default function NavLink({
   href: string;
 }) {
   return (
-    <Link to={href} className="max-w-min">
+    <Link to={href} className="">
       <Button
-        variant={"link"}
-        className="text-foreground hover:text-foreground hover:no-underline active:font-semibold"
+        variant={"linkHover2"}
+        className="text-foreground hover:text-foreground hover:no-underline active:font-semibold justify-start"
       >
         {children}
       </Button>

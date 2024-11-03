@@ -1,19 +1,23 @@
 import { BACKEND_BASE_URL } from "@/config/config";
-import { useAppSelector } from "@/store/store";
-import { useQuery } from "@tanstack/react-query";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
 
+import { addChannels, addThreads } from "@/store/reducers/CommuneReducer";
 
-export const useFetchChannel = ({ communeId, channelId }: { communeId: string, channelId: string }) => {
+export const useFetchChannel = ({ communeId, channelId }: { communeId: string | undefined, channelId: string | undefined }) => {
+
+
+    const dispatch = useAppDispatch();
     const { token } = useAppSelector(state => state.auth);
     const [isLoading, setIsLoading] = useState(true);
-    const [channel, setChannel] = useState();
+
     const [error, setError] = useState()
     const [hasMore, setHasMore] = useState(true)
     const [page, setPage] = useState(1)
-    const [threads, setThreads] = useState<unknown>([])
+
     const fetchChannel = async () => {
+        if (!channelId || !communeId) return
         if (!hasMore) return
         setIsLoading(true)
         try {
@@ -29,9 +33,12 @@ export const useFetchChannel = ({ communeId, channelId }: { communeId: string, c
             if (status !== 200) {
                 throw new Error("Something Went Wrong")
             }
-            setThreads((threads: any) => [...threads, ...data.channel.threads])
-            setChannel(data.channel);
-            setPage(data.pageNumber + 1)
+            try {
+                dispatch(addThreads(data.channel.threads))
+            } catch (err) {
+                console.log("Error in dispatching actions:", err);
+            }
+            setPage(state => state + 1)
             setHasMore(data.hasMore)
         } catch (e: any) {
             console.log(e.message);
@@ -46,9 +53,6 @@ export const useFetchChannel = ({ communeId, channelId }: { communeId: string, c
         isLoading,
         error,
         hasMore,
-        channel,
-        threads,
-        setThreads,
         fetchChannel,
     }
 }

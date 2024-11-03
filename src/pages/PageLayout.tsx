@@ -14,7 +14,7 @@ export default function PageLayout({
     <div className="w-screen h-screen bg-background flex flex-col overflow-hidden">
       {topbar ? topbar : <Topbar />}
       <div className="flex flex-1">
-        <div className="hidden md:block md:min-w-[200px]">
+        <div className="hidden md:block md:max-w-[250px] md:min-w-[200px]">
           {sidebar ? sidebar : <SidebarNav />}
         </div>
         <div className="flex-1 pt-14">{children}</div>

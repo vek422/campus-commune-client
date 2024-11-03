@@ -54,6 +54,7 @@ const ThreadMedia = ({ images }: { images?: string[]; videos?: string[] }) => {
     <div className="flex gap-2">
       {images?.map((imageUri) => (
         <img
+          key={imageUri}
           src={`${BACKEND_BASE_URL}/static/${imageUri}`}
           alt="commune"
           className="w-44 h-44 object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
@@ -119,7 +120,6 @@ function ThreadComments({ thread }) {
   useEffect(() => {
     fetchThreadComments();
   }, []);
-  console.log("1");
   return (
     <div className="flex flex-col gap-2">
       <AddThreadComment
@@ -159,7 +159,6 @@ function ThreadCommentCard({ comment, threadId }) {
     addReplyOptimistically,
   } = useFetchCommentReplies({ threadId, commentId: comment._id });
 
-  console.log("replies:", comments);
   useEffect(() => {
     if (showComments) fetchCommentReplies();
   }, [showComments]);
@@ -229,7 +228,6 @@ function ThreadCommentCard({ comment, threadId }) {
 }
 
 function PostCommentReply({ commentId, threadId, addReplyOptimistically }) {
-  console.log("Thread Id", threadId);
   const { isLoading, error, success, postCommentReply, savedReply } =
     usePostCommentReply(threadId);
   const { user } = useAppSelector((state) => state.auth);

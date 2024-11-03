@@ -16,7 +16,6 @@ export const useFetchThreadComments = (threadId: string) => {
             const { data, status } = await axios.get(`${BACKEND_BASE_URL}/thread/${threadId}/comments?limit=${limit}&page=${page}`);
 
             if (status === 200) {
-                console.log(data)
                 setComments(state => [...state, ...data.comments]);
                 setPage(state => state + 1);
                 setHasMore(data.hasMore)

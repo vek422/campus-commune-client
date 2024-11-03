@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-export const CreateThread = ({ setThreads }) => {
+export const CreateThread = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeDialog = () => {
@@ -26,10 +26,7 @@ export const CreateThread = ({ setThreads }) => {
             Create New Thread
           </DialogHeader>
           <div className="w-full">
-            <CreateThreadForm
-              closeDialog={closeDialog}
-              setThreads={setThreads}
-            />
+            <CreateThreadForm closeDialog={closeDialog} />
           </div>
         </>
       </DialogContent>

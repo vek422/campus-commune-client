@@ -1,8 +1,20 @@
+import { useAppSelector } from "@/store/store";
 import NavLink from "../../../components/NavLink";
 import { useParams } from "react-router-dom";
+import { createSelector } from "@reduxjs/toolkit";
 
-export default function CommuneSidebarNav({ commune }) {
-  const { communeId } = useParams();
+const selectChannel = createSelector(
+  (state) => state.commune.communes,
+  (state) => state.commune.channels,
+  (state, communeId) => communeId,
+  (communes, channels, communeId) =>
+    communes[communeId].channels.map((channelId) => channels[channelId])
+);
+
+export default function CommuneSidebarNav() {
+  const { communeId = "" } = useParams();
+  const channels = useAppSelector((state) => selectChannel(state, communeId));
+
   return (
     <nav className="pt-16 px-4 h-screen flex flex-col gap-4">
       <div className="flex flex-col ">
@@ -15,8 +27,8 @@ export default function CommuneSidebarNav({ commune }) {
       <div className="flex flex-col">
         <h2 className="text-lg font-semibold">Channels</h2>
         <div className="overflow-scroll max-h-[20vh] flex flex-col">
-          {commune?.channels &&
-            commune?.channels.map((channel) => (
+          {channels &&
+            channels.map((channel) => (
               <NavLink
                 key={channel._id}
                 href={`/commune/${communeId}/channel/${channel._id}`}
@@ -24,9 +36,7 @@ export default function CommuneSidebarNav({ commune }) {
                 {channel.name}
               </NavLink>
             ))}
-          {commune?.channels && commune?.channels.length === 0 && (
-            <p>No channels</p>
-          )}
+          {channels && channels.length === 0 && <p>No channels</p>}
         </div>
       </div>
     </nav>

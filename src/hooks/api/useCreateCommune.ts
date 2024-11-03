@@ -31,9 +31,7 @@ export const useCreateCommune = () => {
             formData.append("createdBy", values.createdBy);
             formData.append('profileUri', values.profileUri);
 
-            for (const [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
+
             const response = await axios.postForm(`${BACKEND_BASE_URL}/commune/create`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",

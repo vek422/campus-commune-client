@@ -1,5 +1,6 @@
 import { BACKEND_BASE_URL } from "@/config/config";
-import { useAppSelector } from "@/store/store";
+import { addChannels, addCommune } from "@/store/reducers/CommuneReducer";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
 
@@ -8,8 +9,8 @@ export const useFetchCommune = (communeId: string | undefined) => {
     const { token } = useAppSelector(state => state.auth);
     const [isLoading, setIsloading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [commune, setCommune] = useState(null);
 
+    const dispatch = useAppDispatch();
 
     const fetchCommune = async () => {
         if (!communeId) return
@@ -23,7 +24,12 @@ export const useFetchCommune = (communeId: string | undefined) => {
             }
             );
             if (status === 200) {
-                setCommune(data.commune)
+                try {
+                    dispatch(addCommune(data.commune));
+                } catch (error) {
+                    console.error("Error in dispatching actions:", error);
+                }
+
             } else {
                 setError("Something went wrong");
             }
@@ -35,7 +41,7 @@ export const useFetchCommune = (communeId: string | undefined) => {
     }
 
     return {
-        isLoading, error, commune, fetchCommune
+        isLoading, error, fetchCommune
     }
 
 }

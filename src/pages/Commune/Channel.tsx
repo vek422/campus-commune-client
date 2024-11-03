@@ -6,20 +6,28 @@ import { Thread } from "@/components/Thread/Thread";
 import { CreateThread } from "@/components/Thread/CreateThread";
 import { ThreadCardLoader } from "@/components/Loaders/ThreadCardLoader";
 import { useEffect, useState } from "react";
-import { BACKEND_BASE_URL } from "@/config/config";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAppSelector } from "@/store/store";
+import { createSelector } from "@reduxjs/toolkit";
+
+const selectThread = createSelector(
+  (state) => state.commune.channels,
+  (state) => state.commune.threads,
+  (state, channelId) => channelId,
+  (channels, threads, channelId) => {
+    return channels[channelId]?.threads.map((threadId) => threads[threadId]);
+  }
+);
 
 export default function Channel() {
-  const { communeId, channelId } = useParams();
-  const [commune] = useOutletContext();
-  const { isLoading, channel, threads, setThreads, fetchChannel, hasMore } =
-    useFetchChannel({
-      communeId,
-      channelId,
-    });
-  const [message, setMessage] = useState("");
-
+  const { communeId = "", channelId = "" } = useParams();
+  const channel = useAppSelector((state) => state.commune.channels[channelId]);
+  const threads = useAppSelector((state) => selectThread(state, channelId));
+  const commune = useAppSelector((state) => state.commune.communes[communeId]);
+  const { isLoading, fetchChannel, hasMore } = useFetchChannel({
+    communeId,
+    channelId,
+  });
   useEffect(() => {
     fetchChannel();
   }, []);
@@ -49,7 +57,7 @@ export default function Channel() {
         </div>
       </div>
       <div className="w-1/4 h-screen px-10 py-5">
-        <CreateThread setThreads={setThreads} />
+        <CreateThread />
       </div>
     </div>
   );

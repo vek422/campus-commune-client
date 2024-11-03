@@ -1,14 +1,11 @@
-import ThreadCard from "@/components/Thread/ThreadCard";
 import { Button } from "@/components/ui/button";
 import { BACKEND_BASE_URL } from "@/config/config";
-import { useFetchCommune } from "@/hooks/api/useFetchCommune";
-import { useEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useAppSelector } from "@/store/store";
+import { useParams } from "react-router-dom";
 
 export default function CommuneHome() {
-  const [commune] = useOutletContext();
-  const { communeId } = useParams();
-  console.log(commune);
+  const { communeId = "" } = useParams();
+  const commune = useAppSelector((state) => state.commune.communes[communeId]);
   return (
     <div className="flex flex-col gap-2 w-full pr-10">
       {/* header */}

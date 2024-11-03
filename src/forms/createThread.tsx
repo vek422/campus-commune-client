@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useCreateThread } from "@/hooks/api/useCreateThread";
 import { useOutletContext, useParams } from "react-router-dom";
 import { LoadingButton } from "@/components/ui/loadingButton";
+import { useAppSelector } from "@/store/store";
 
 const initialValues = {
   title: "",
@@ -34,10 +35,10 @@ const schema = z.object({
   videos: z.any().optional(),
 });
 
-export function CreateThreadForm({ closeDialog, setThreads }) {
-  const { error, thread, createThread, isLoading } = useCreateThread();
-  const { channelId } = useParams();
-  const [commune] = useOutletContext();
+export function CreateThreadForm({ closeDialog }) {
+  const { thread, createThread, isLoading } = useCreateThread();
+  const { channelId, communeId = "" } = useParams();
+  const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const onSubmit = (values: typeof initialValues) => {
     createThread({ ...values, channelId, communeId: commune?._id });
   };

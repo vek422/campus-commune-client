@@ -1,15 +1,18 @@
 
+import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { io, Socket } from "socket.io-client"
-export const useSocket = ({ url, options = {}, communeId }: { url: string, options?: object, communeId: string }) => {
+export const useSocket = () => {
     const { user } = useAppSelector(state => state.auth)
     const [isConnected, setIsConnected] = useState(false);
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>(null)
     const socketRef = useRef<Socket | null>(null);
-    const stableOptions = useMemo(() => options, [options])
+    // const stableOptions = useMemo(() => options, [options])
+
     useEffect(() => {
-        socketRef.current = io(url, stableOptions);
+        if (!user) return;
+        socketRef.current = io(BACKEND_BASE_URL);
 
         socketRef.current?.on("connect", () => {
             setIsConnected(true)
@@ -30,12 +33,23 @@ export const useSocket = ({ url, options = {}, communeId }: { url: string, optio
             console.log("Message received : ", e)
         })
 
-        socketRef.current?.emit("joinRoom", communeId, user._id)
+
+
+        const userCommunes = user?.communes.map(commune => commune._id)
+        if (user?.communes?.length > 0)
+            socketRef.current?.emit('join-rooms', userCommunes, user?._id);
+
         return () => {
+            socketRef.current?.emit('leave-rooms', userCommunes, user._id,)
+            socketRef.current?.off("connect")
+            socketRef.current?.off("disconnect")
+            socketRef.current?.off("connect_error")
+            socketRef.current?.off("message")
             socketRef.current?.disconnect()
+            setIsConnected(false);
         }
 
-    }, [])
+    }, [user])
 
 
     return { socket: socketRef.current, isConnected, error }

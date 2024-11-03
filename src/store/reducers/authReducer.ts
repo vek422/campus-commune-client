@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Commune } from "./CommuneReducer";
 
 
 interface User {
   firstName: string;
   lastName: string;
   email: string;
-  communes: object[] | string[];
-  friends: object[] | string[];
+  communes: Commune[] | string[];
+  friends: User[] | string[];
   profileUrl: string;
   comments: object[] | string[];
   createdAt: string;
   updatedAt: string;
-  __v: number;
   _id: string;
 }
 
