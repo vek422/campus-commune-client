@@ -8,7 +8,7 @@ const selectChannel = createSelector(
   (state) => state.commune.channels,
   (state, communeId) => communeId,
   (communes, channels, communeId) =>
-    communes[communeId].channels.map((channelId) => channels[channelId])
+    communes[communeId]?.channels?.map((channelId) => channels[channelId])
 );
 
 export default function CommuneSidebarNav() {

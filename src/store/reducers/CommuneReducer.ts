@@ -93,8 +93,6 @@ const communeSlice = createSlice({
         },
         addThreads: (state, action: PayloadAction<Thread[]>) => {
 
-
-            console.log("Adding threads", action.payload)
             if (action.payload.length === 0) return;
             if (!state.channels[action.payload[0].channelId]) {
                 console.log("No Channel Found Returning")
@@ -108,7 +106,14 @@ const communeSlice = createSlice({
             })
 
         },
-
+        addThreadFront: (state, action: PayloadAction<Thread>) => {
+            if (!state.channels[action.payload.channelId]) {
+                console.log("No Channel Found Returning")
+                return
+            }
+            state.threads[action.payload._id] = action.payload;
+            state.channels[action.payload.channelId]?.threads.unshift(action.payload._id);
+        },
         clearState: (state) => {
             state.communes = {}
             state.channels = {}
@@ -117,5 +122,5 @@ const communeSlice = createSlice({
     }
 });
 
-export const { addCommune, addThreads, addChannels, addCommunes } = communeSlice.actions;
+export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront } = communeSlice.actions;
 export default communeSlice.reducer;
