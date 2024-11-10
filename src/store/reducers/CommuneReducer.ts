@@ -60,6 +60,7 @@ const communeSlice = createSlice({
             })
         },
         addCommunes: (state, action: PayloadAction<Commune[]>) => {
+            if (action.payload.length === 0) return;
             if (typeof action.payload[0].channels[0] != "string")
                 action.payload.forEach((commune) => {
                     state.communes[commune._id] = { ...commune, channels: commune.channels.map(channel => channel._id) }
