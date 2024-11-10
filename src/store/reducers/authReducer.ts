@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Commune } from "./CommuneReducer";
+import { addCommune, Commune } from "./CommuneReducer";
 
 
 interface User {
@@ -30,6 +30,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    updateUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
     login: (state, action: PayloadAction<AuthState>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -44,5 +47,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateUser } = authSlice.actions;
 export default authSlice.reducer;

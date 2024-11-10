@@ -1,19 +1,33 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router.ts";
 import { Toaster } from "./components/ui/toaster.tsx";
-import { useSocket } from "./hooks/useSocket.ts";
+import { useSocket } from "./context/SocketContext.tsx";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addThreadFront, addThreads } from "./store/reducers/CommuneReducer.ts";
+import { addThreadFront } from "./store/reducers/CommuneReducer.ts";
+import { useAppSelector } from "./store/store.ts";
 export default function App() {
-  const { socket, isConnected, error } = useSocket();
   const dispatch = useDispatch();
+  const socket = useSocket();
+  const communesIds = useAppSelector((state) =>
+    Object.keys(state.commune.communes)
+  );
+  const user = useAppSelector((state) => state.auth.user);
+
   useEffect(() => {
-    socket?.on("new-thread", (thread, communeId) => {
-      console.log(`New thread in commune ${communeId}:`, thread);
-      dispatch(addThreadFront(thread));
-    });
-  }, [socket]);
+    if (socket?.connected) {
+      socket?.on("new-thread", (thread, communeId) => {
+        console.log(`New thread in commune ${communeId}:`, thread);
+        dispatch(addThreadFront(thread));
+      });
+      socket.emit("join-rooms", communesIds, user?._id);
+    }
+    return () => {
+      socket?.emit("leave-rooms", communesIds, user?._id);
+      socket?.off("new-thread");
+    };
+  }, [socket?.connected]);
+
   return (
     <>
       <RouterProvider router={router} />

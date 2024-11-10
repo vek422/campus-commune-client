@@ -36,6 +36,7 @@ export const useSocket = () => {
 
 
         const userCommunes = user?.communes.map(commune => commune._id)
+        console.log(userCommunes)
         if (user?.communes?.length > 0)
             socketRef.current?.emit('join-rooms', userCommunes, user?._id);
 

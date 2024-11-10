@@ -3,6 +3,7 @@ import { useToast } from "../use-toast";
 import axios from "axios";
 import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
+import { useSocket } from "@/context/SocketContext";
 
 interface CreateCommuneValues {
     name: string;
@@ -17,7 +18,7 @@ export const useCreateCommune = () => {
     const [data, setData] = useState<object | null>(null)
     const { toast } = useToast();
     const { token } = useAppSelector(state => state.auth)
-
+    const socket = useSocket()
     const createCommune = async (values: CreateCommuneValues) => {
         setIsLoading(true);
 
@@ -46,6 +47,9 @@ export const useCreateCommune = () => {
             }
 
             setData(response.data);
+            if (socket?.connected) {
+                socket.emit("join-room", response.data._id, values.createdBy)
+            }
             toast({
                 title: "Commune created successfully"
             });
