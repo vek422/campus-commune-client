@@ -20,7 +20,7 @@ export default function CommuneSidebarNav() {
       <div className="flex flex-col ">
         <h2 className="text-lg font-semibold">General</h2>
         <NavLink href="/">Home</NavLink>
-        <NavLink href="/communes">Communes</NavLink>
+        <NavLink href="/explore">Explore</NavLink>
         <NavLink href="/">Saved Threads</NavLink>
         <NavLink href="/">Drafts</NavLink>
       </div>

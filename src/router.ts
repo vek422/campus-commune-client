@@ -3,7 +3,7 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import { withAuthGaurd } from "./components/AuthGaurd";
 import Home from "./pages/Home";
-import Commune from "./pages/Commune/CommuneLayout";
+import Explore from "./pages/Explore";
 import CreateCommune from "./pages/Commune/CreateCommune";
 import CommuneLayout from "./pages/Commune/CommuneLayout";
 import CommuneHome from "./pages/Commune/CommuneHome";
@@ -25,6 +25,10 @@ export const router = createBrowserRouter([
   {
     path: "/commune/create-commune",
     Component: withAuthGaurd(CreateCommune),
+  },
+  {
+    path: "/explore",
+    Component: withAuthGaurd(Explore)
   },
   {
     path: "/commune",
