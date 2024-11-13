@@ -12,6 +12,10 @@ interface User {
   comments: object[] | string[];
   createdAt: string;
   updatedAt: string;
+  globalRole: {
+    name: string;
+    permissions: string[];
+  }
   _id: string;
 }
 

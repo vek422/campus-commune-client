@@ -8,6 +8,7 @@ import { useFetchUserCommunes } from "@/hooks/api/useFetchUserCommunes";
 export default function SidebarNav() {
   const { communes } = useAppSelector((state) => state.commune);
   const { isLoading } = useFetchUserCommunes();
+  const { user } = useAppSelector((state) => state.auth);
 
   return (
     <nav className="mt-14 py-2 rounded-lg overflow-hidden px-4 h-full flex flex-col gap-4">
@@ -39,12 +40,14 @@ export default function SidebarNav() {
         </div>
       </div>
       <div className="">
-        <Link to="/commune/create-commune" className="text-primary underline">
-          <Button variant={"expandIcon"} className="font-semibold">
-            <Plus size={24} className="mr-1 h-4 w-4" />
-            Create Commune
-          </Button>
-        </Link>
+        {user && user?.globalRole?.name === "admin" && (
+          <Link to="/commune/create-commune" className="text-primary underline">
+            <Button variant={"expandIcon"} className="font-semibold">
+              <Plus size={24} className="mr-1 h-4 w-4" />
+              Create Commune
+            </Button>
+          </Link>
+        )}
       </div>
     </nav>
   );
