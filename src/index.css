@@ -231,4 +231,12 @@
   * {
     scrollbar-width: none;
   }
+  .truncate-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Adjust the number here to control lines */
+    -webkit-line-clamp: 3;
+  }
 }
