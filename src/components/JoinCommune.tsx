@@ -1,36 +1,25 @@
 import { useAppSelector } from "@/store/store";
 import { Button } from "./ui/button";
 import { useJoinCommune } from "@/hooks/api/useJoinCommune";
+import { Commune } from "@/store/reducers/CommuneReducer";
 
-export const JoinCommune = ({ communeId }: { communeId: string }) => {
-  const commune = useAppSelector((state) => state.commune.communes[communeId]);
-  const { isLoading, success, joinCommune, leaveCommune } =
-    useJoinCommune(communeId);
+export const JoinCommune = ({ commune }: { commune: Commune }) => {
+  const { isLoading, joinCommune } = useJoinCommune(commune?._id);
   const user = useAppSelector((state) => state.auth.user);
-
-  const hasAlreadyJoined =
-    commune?.members.map((commune) => commune._id).includes(user?._id) ||
-    success;
+  console.log(user?._id);
+  const hasAlreadyJoined = user?.communes?.includes(commune?._id) || false;
+  console.log(hasAlreadyJoined);
   return (
     <div className="flex gap-2">
-      <Button
-        className="max-w-min text-foreground font-semibold"
-        variant={hasAlreadyJoined ? "link" : "outline"}
-        size="sm"
-        disabled={hasAlreadyJoined}
-        onClick={() => joinCommune(user?._id)}
-      >
-        {hasAlreadyJoined ? "Joined" : "Join"}
-      </Button>
-      {hasAlreadyJoined && (
+      {!hasAlreadyJoined && (
         <Button
           className="max-w-min text-foreground font-semibold"
-          variant={"destructive"}
+          variant={hasAlreadyJoined ? "link" : "outline"}
           size="sm"
-          disabled={!hasAlreadyJoined}
-          onClick={() => leaveCommune(user?._id)}
+          disabled={hasAlreadyJoined}
+          onClick={() => joinCommune(user?._id)}
         >
-          Leave
+          {hasAlreadyJoined ? "Joined" : "Join"}
         </Button>
       )}
     </div>

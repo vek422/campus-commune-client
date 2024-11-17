@@ -1,3 +1,4 @@
+import CommuneMenu from "@/components/CommuneMenu";
 import { JoinCommune } from "@/components/JoinCommune";
 import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
@@ -6,6 +7,8 @@ import { useParams } from "react-router-dom";
 export default function CommuneHome() {
   const { communeId = "" } = useParams();
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
+  const user = useAppSelector((state) => state.auth.user);
+  const hasJoineCommune = user?.communes?.includes(communeId) || false;
   return (
     <div className="flex flex-col gap-2 w-full pr-10">
       {/* header */}
@@ -20,7 +23,10 @@ export default function CommuneHome() {
         <div className="h-full flex flex-col gap-2 p-2  w-1/2 text-black ">
           <h1 className="text-4xl font-bold">{commune?.name}</h1>
           <p className=" rounded-lg h-20  ">{commune?.description}</p>
-          <JoinCommune communeId={communeId} />
+          <div className="absolute right-0">
+            {hasJoineCommune && <CommuneMenu communeId={communeId} />}
+          </div>
+          <JoinCommune commune={commune} />
         </div>
       </div>
       <div className="w-3/4 flex flex-col gap-5 h-screen overflow-scroll pb-72"></div>

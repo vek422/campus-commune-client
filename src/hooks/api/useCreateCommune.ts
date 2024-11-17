@@ -36,7 +36,7 @@ export const useCreateCommune = () => {
             const response = await axios.postForm(`${BACKEND_BASE_URL}/commune/create`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "Authorization": `Bearer ${token}}`
+                    "Authorization": `Bearer ${token}`
                 }
             });
             if (response.status !== 200) {

@@ -45,11 +45,15 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-    updateCommune: (state, payload) => {
-      state.user?.communes.push(payload)
+    joinCommune: (state, action: PayloadAction<string>) => {
+      console.log("Joining commune reducer")
+      state.user?.communes.push(action.payload)
+    },
+    leaveCommune: (state, action: PayloadAction<string>) => {
+      state.user.communes.splice(state.user.communes.indexOf(action.payload), 1)
     }
   },
 });
 
-export const { login, logout, updateUser } = authSlice.actions;
+export const { login, logout, updateUser, joinCommune, leaveCommune } = authSlice.actions;
 export default authSlice.reducer;

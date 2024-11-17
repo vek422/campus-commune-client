@@ -2,13 +2,17 @@ import { BACKEND_BASE_URL } from "@/config/config";
 import axios from "axios";
 import { useState } from "react";
 import { useToast } from "../use-toast";
-import { useAppSelector } from "@/store/store";
-
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import {
+  joinCommune as joinCommuneReducer,
+  leaveCommune as leaveCommuneReducer,
+} from "@/store/reducers/authReducer";
 export const useJoinCommune = (communeId: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const joinCommune = async (userId: string) => {
     try {
       setIsLoading(true);
@@ -27,6 +31,7 @@ export const useJoinCommune = (communeId: string) => {
 
       if (status === 200) {
         setSuccess(true);
+        dispatch(joinCommuneReducer(communeId));
         toast({
           title: "Success",
           description: "You have joined the commune",
@@ -46,7 +51,7 @@ export const useJoinCommune = (communeId: string) => {
   const leaveCommune = async (userId: string) => {
     try {
       setIsLoading(true);
-      const { data, status } = await axios.post(
+      const { status } = await axios.post(
         `${BACKEND_BASE_URL}/commune/leave`,
         {
           userId,
@@ -60,6 +65,7 @@ export const useJoinCommune = (communeId: string) => {
       );
 
       if (status === 200) {
+        dispatch(leaveCommuneReducer(communeId));
         setSuccess(false);
         toast({
           title: "Success",

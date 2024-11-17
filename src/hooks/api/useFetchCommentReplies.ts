@@ -1,4 +1,5 @@
 import { BACKEND_BASE_URL } from "@/config/config";
+import { useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
 
@@ -12,11 +13,17 @@ export const useFetchCommentReplies = ({ threadId, commentId }: {
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const limit = 5;
+    const { token } = useAppSelector(state => state.auth);
     const fetchCommentReplies = async () => {
         if (!hasMore) return;
         setIsLoading(true);
         try {
-            const { data, status } = await axios.get(`${BACKEND_BASE_URL}/thread/${threadId}/comment/${commentId}/replies?limit=${limit}&page=${page}`);
+            const { data, status } = await axios.get(`${BACKEND_BASE_URL}/thread/${threadId}/comment/${commentId}/replies?limit=${limit}&page=${page}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
 
             if (status === 200) {
                 setComments(state => [...state, ...data.comments]);

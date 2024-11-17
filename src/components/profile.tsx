@@ -30,11 +30,12 @@ export default function Profile() {
         <DropdownMenuLabel>Hi {user?.firstName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="flex gap-2"
+          className="flex gap-2 text-destructive focus:bg-destructive
+          focus:text-destructive-foreground cursor-pointer"
           onClick={() => dispatch(logout())}
         >
           <LogOut />
-          <p>Logout</p>
+          Logout
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
