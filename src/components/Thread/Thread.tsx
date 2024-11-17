@@ -13,6 +13,7 @@ import { calculateAge } from "@/lib/calculateAge";
 import { usePostCommentReply } from "@/hooks/api/usePostCommentReply";
 import { useFetchCommentReplies } from "@/hooks/api/useFetchCommentReplies";
 import { Card } from "../ui/card";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 export function Thread({ thread }) {
   const [showComments, setShowComments] = useState(false);
@@ -53,12 +54,24 @@ const ThreadMedia = ({ images }: { images?: string[]; videos?: string[] }) => {
   return (
     <div className="flex gap-2">
       {images?.map((imageUri) => (
-        <img
-          key={imageUri}
-          src={`${BACKEND_BASE_URL}/static/${imageUri}`}
-          alt="commune"
-          className="w-44 h-44 object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
-        />
+        <Dialog>
+          <DialogTrigger>
+            <img
+              key={imageUri}
+              src={`${BACKEND_BASE_URL}/static/${imageUri}`}
+              alt="commune"
+              className="w-44 h-44 object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
+            />
+          </DialogTrigger>
+          <DialogContent className="min-w-[80vw] bg-transparent">
+            <img
+              key={imageUri}
+              src={`${BACKEND_BASE_URL}/static/${imageUri}`}
+              alt="commune"
+              className=" object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
+            />
+          </DialogContent>
+        </Dialog>
       ))}
     </div>
   );

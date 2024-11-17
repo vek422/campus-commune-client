@@ -17,7 +17,7 @@ export default function Profile() {
   if (!user) return null;
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button variant={"ghost"} size={"icon"} className="rounded-full">
           <Avatar>
             <AvatarFallback>

@@ -5,10 +5,7 @@ import { Button } from "../ui/button";
 
 export default function ThreadCard() {
   return (
-    <div
-      className="w-full  min-h-max bg-secondary/30 border border-secondary rounded-xl p-2 
-    flex flex-col gap-2"
-    >
+    <div className="w-full  min-h-max bg-secondary/30 border border-secondary rounded-xl p-2 flex flex-col gap-2">
       {/* thread main section */}
       <div className="flex gap-2 ">
         <Avatar className="h-10 w-10">

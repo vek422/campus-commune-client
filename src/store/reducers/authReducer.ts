@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addCommune, Commune } from "./CommuneReducer";
+import { Commune } from "./CommuneReducer";
 
 
 interface User {

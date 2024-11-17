@@ -9,7 +9,6 @@ interface RegisterProps {
   firstName: string;
   lastName: string;
 }
-import { redirect } from "react-router-dom";
 export const useRegister = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useToast } from "../use-toast";
 import { BACKEND_BASE_URL } from "@/config/config";
+import { useAppSelector } from "@/store/store";
 
 export const usePostCommentReply = (threadId: string | undefined) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -9,13 +10,19 @@ export const usePostCommentReply = (threadId: string | undefined) => {
     const [success, setSuccess] = useState(false);
     const [savedReply, setSavedReply] = useState(null);
     const { toast } = useToast()
+    const { token } = useAppSelector(state => state.auth);
     const postCommentReply = async ({ commentId, content, createdBy }: { commentId: string, content: string, createdBy: string }) => {
+
         setIsLoading(true);
         setError(null);
         setSuccess(false);
 
         try {
-            const { data, status } = await axios.post(`${BACKEND_BASE_URL}/thread/${threadId}/comment/${commentId}/reply`, { content, createdBy })
+            const { data, status } = await axios.post(`${BACKEND_BASE_URL}/thread/${threadId}/comment/${commentId}/reply`, { content, createdBy }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
             if (status !== 201) {
                 throw new Error("Failed to post comment")
             }
