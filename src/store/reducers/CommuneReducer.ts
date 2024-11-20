@@ -11,6 +11,12 @@ export interface Commune {
     createdBy: string | object;
     createdAt: Date;
     updatedAt: Date;
+    roles: {
+        [key: string]: {
+            name: string,
+            permissions: string[]
+        }
+    }
 }
 
 export interface Channel {
@@ -120,8 +126,14 @@ const communeSlice = createSlice({
             state.channels = {}
             state.threads = {}
         },
+        removeThread: (state, action: PayloadAction<{ threadId: string, channelId: string }>) => {
+            const thread = state.threads[action.payload.threadId];
+            if (!thread) return;
+            delete state.threads[action.payload.threadId];
+            state.channels[action.payload.channelId].threads = state.channels[action.payload.channelId].threads.filter(threadId => threadId !== action.payload.threadId);
+        }
     }
 });
 
-export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront } = communeSlice.actions;
+export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront, removeThread } = communeSlice.actions;
 export default communeSlice.reducer;

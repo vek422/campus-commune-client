@@ -14,8 +14,24 @@ import { usePostCommentReply } from "@/hooks/api/usePostCommentReply";
 import { useFetchCommentReplies } from "@/hooks/api/useFetchCommentReplies";
 import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { useDeleteThread } from "@/hooks/api/useDeleteThread";
+import { useParams } from "react-router-dom";
 
 export function Thread({ thread }) {
+  const { isLoading, deleteThread } = useDeleteThread({
+    channelId: thread.channelId,
+    communeId: thread.communeId,
+  });
+  const commune = useAppSelector(
+    (state) => state.commune.communes[thread?.communeId]
+  );
+  console.dir(commune);
+  console.dir(thread);
+  const user = useAppSelector((state) => state.auth.user);
+  const canDeleteThread =
+    thread.createdBy._id === user?._id ||
+    (commune?.roles && commune?.roles[user?._id as string]?.name === "admin");
+
   const [showComments, setShowComments] = useState(false);
   return (
     <Card
@@ -46,6 +62,11 @@ export function Thread({ thread }) {
           {showComments && <ThreadComments thread={thread} />}
         </div>
       </div>
+      {canDeleteThread && (
+        <Button variant={"ghost"} onClick={() => deleteThread(thread._id)}>
+          Delete
+        </Button>
+      )}
     </Card>
   );
 }

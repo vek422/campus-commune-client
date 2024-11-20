@@ -4,7 +4,7 @@ import { useJoinCommune } from "@/hooks/api/useJoinCommune";
 import { Commune } from "@/store/reducers/CommuneReducer";
 
 export const JoinCommune = ({ commune }: { commune: Commune }) => {
-  const { isLoading, joinCommune } = useJoinCommune(commune?._id);
+  const { joinCommune } = useJoinCommune(commune?._id);
   const user = useAppSelector((state) => state.auth.user);
   console.log(user?._id);
   const hasAlreadyJoined = user?.communes?.includes(commune?._id) || false;
