@@ -131,6 +131,7 @@ const communeSlice = createSlice({
             if (!thread) return;
             delete state.threads[action.payload.threadId];
             state.channels[action.payload.channelId].threads = state.channels[action.payload.channelId].threads.filter(threadId => threadId !== action.payload.threadId);
+            console.log("Thread Deleted")
         }
     }
 });

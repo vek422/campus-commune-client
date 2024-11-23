@@ -16,28 +16,23 @@ import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { useDeleteThread } from "@/hooks/api/useDeleteThread";
 import { useParams } from "react-router-dom";
+import ThreadDropdown from "./ThreadDropdown";
 
 export function Thread({ thread }) {
-  const { isLoading, deleteThread } = useDeleteThread({
-    channelId: thread.channelId,
-    communeId: thread.communeId,
-  });
-  const commune = useAppSelector(
-    (state) => state.commune.communes[thread?.communeId]
-  );
-  console.dir(commune);
-  console.dir(thread);
-  const user = useAppSelector((state) => state.auth.user);
-  const canDeleteThread =
-    thread.createdBy._id === user?._id ||
-    (commune?.roles && commune?.roles[user?._id as string]?.name === "admin");
-
   const [showComments, setShowComments] = useState(false);
   return (
     <Card
       className="w-full  h-auto bg-secondary/5 border border-secondary rounded-xl p-2 
-    flex flex-col gap-2 "
+    flex flex-col gap-2  relative"
     >
+      <div className="absolute right-0 ">
+        <ThreadDropdown
+          threadId={thread._id}
+          createdBy={thread.createdBy}
+          channelId={thread.channelId}
+          communeId={thread.communeId}
+        />
+      </div>
       <div className="flex gap-2 ">
         <Avatar className="h-7 w-7">
           <AvatarImage
@@ -62,11 +57,6 @@ export function Thread({ thread }) {
           {showComments && <ThreadComments thread={thread} />}
         </div>
       </div>
-      {canDeleteThread && (
-        <Button variant={"ghost"} onClick={() => deleteThread(thread._id)}>
-          Delete
-        </Button>
-      )}
     </Card>
   );
 }

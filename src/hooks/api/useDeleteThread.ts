@@ -15,7 +15,8 @@ export const useDeleteThread = ({ channelId, communeId }: { channelId: string, c
         try {
             const { status } = await axios.delete(`${BACKEND_BASE_URL}/thread/${threadId}`, {
                 params: {
-                    communeId
+                    communeId,
+                    channelId
                 },
                 headers: {
                     Authorization: `Bearer ${token}`

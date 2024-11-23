@@ -4,7 +4,10 @@ import { Toaster } from "./components/ui/toaster.tsx";
 import { useSocket } from "./context/SocketContext.tsx";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addThreadFront } from "./store/reducers/CommuneReducer.ts";
+import {
+  addThreadFront,
+  removeThread,
+} from "./store/reducers/CommuneReducer.ts";
 import { useAppSelector } from "./store/store.ts";
 export default function App() {
   const dispatch = useDispatch();
@@ -20,13 +23,17 @@ export default function App() {
         console.log(`New thread in commune ${communeId}:`, thread);
         dispatch(addThreadFront(thread));
       });
+      socket?.on("deleted-thread", (threadId, channelId, communeId) => {
+        console.log(`Thread ${threadId} deleted in commune ${communeId}`);
+        dispatch(removeThread({ threadId, channelId }));
+      });
       socket.emit("join-rooms", communesIds, user?._id);
     }
     return () => {
       socket?.emit("leave-rooms", communesIds, user?._id);
       socket?.off("new-thread");
     };
-  }, [socket?.connected]);
+  }, [socket?.connected, communesIds, user?._id]);
 
   return (
     <>
