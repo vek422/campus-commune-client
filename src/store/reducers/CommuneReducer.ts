@@ -11,11 +11,9 @@ export interface Commune {
     createdBy: string | object;
     createdAt: Date;
     updatedAt: Date;
+    allRoles: Role[];
     roles: {
-        [key: string]: {
-            name: string,
-            permissions: string[]
-        }
+        [key: string]: Role
     }
 }
 
@@ -40,6 +38,12 @@ export interface CommuneState {
     channels: { [key: string]: Channel },
     threads: { [key: string]: Thread }
 }
+export interface Role {
+    _id: string,
+    name: string,
+    description: string,
+    permissions: string[]
+}
 
 const initialState: CommuneState = {
     communes: {},
@@ -51,6 +55,7 @@ const communeSlice = createSlice({
     name: "commune",
     initialState,
     reducers: {
+
         addCommune: (state, action: PayloadAction<Commune>) => {
             //only add commune related data ,no channel ,no threads
             state.communes[action.payload._id] = {
@@ -79,6 +84,21 @@ const communeSlice = createSlice({
                     state.communes[commune._id] = { ...commune, channels: [] }
                 })
             }
+        },
+        addRole: (state, action: PayloadAction<{ role: Role, communeId: string }>) => {
+            if (!state.communes[action.payload.communeId]) {
+                console.log("no Commune found returning")
+            };
+            state.communes[action.payload.communeId].allRoles.push(action.payload.role);
+            console.log("Role Added")
+        },
+        assignRole: (state, action: PayloadAction<{ communeId: string, userId: string, role: Role }>) => {
+            if (!state.communes[action.payload.communeId]) {
+                console.log("no Commune found returning")
+                return;
+            }
+            state.communes[action.payload.communeId].roles[action.payload.userId] = action.payload.role;
+            console.log("Role Assigned")
         },
         addChannels: (state, action: PayloadAction<{ channels: Channel[], communeId: string }>) => {
             // check if commune exists
@@ -136,5 +156,5 @@ const communeSlice = createSlice({
     }
 });
 
-export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront, removeThread } = communeSlice.actions;
+export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront, removeThread, addRole, assignRole } = communeSlice.actions;
 export default communeSlice.reducer;

@@ -9,10 +9,14 @@ import { Button } from "./ui/button";
 import { EllipsisVertical } from "lucide-react";
 import { useJoinCommune } from "@/hooks/api/useJoinCommune";
 import { useAppSelector } from "@/store/store";
+import { Link } from "react-router-dom";
 
 export default function CommuneMenu({ communeId }: { communeId: string }) {
   const { leaveCommune, isLoading, success } = useJoinCommune(communeId);
+  const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const { user } = useAppSelector((state) => state.auth);
+  const isAdmin = commune?.roles[user?._id]?.name === "admin";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,6 +26,11 @@ export default function CommuneMenu({ communeId }: { communeId: string }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="">
         <DropdownMenuGroup className="">
+          {isAdmin && (
+            <DropdownMenuItem>
+              <Link to={`/commune/${communeId}/manage`}>Manage</Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             className="cursor-pointer w-full text-destructive focus:bg-destructive focus:text-destructive-foreground"
             onClick={() => leaveCommune(user?._id)}

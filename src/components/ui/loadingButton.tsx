@@ -2,11 +2,12 @@ import { FC } from "react";
 import { Button, ButtonProps } from "./button";
 import { LoaderCircle } from "lucide-react";
 interface LoadingButtonProps extends ButtonProps {
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 export const LoadingButton: FC<LoadingButtonProps> = ({
   type,
   variant,
+  isLoading = false,
   ...props
 }) => {
   return (
@@ -14,10 +15,10 @@ export const LoadingButton: FC<LoadingButtonProps> = ({
       type={type}
       variant={variant}
       className={props.className}
-      disabled={props.isLoading}
+      disabled={isLoading}
       onClick={props.onClick}
     >
-      {props.isLoading ? (
+      {isLoading ? (
         <LoaderCircle className="animate-spin mr-2 h-4 w-4" />
       ) : (
         props.children

@@ -8,6 +8,7 @@ import CreateCommune from "./pages/Commune/CreateCommune";
 import CommuneLayout from "./pages/Commune/CommuneLayout";
 import CommuneHome from "./pages/Commune/CommuneHome";
 import Channel from "./pages/Commune/Channel";
+import CommuneManage from "./pages/Commune/CommuneManage";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,9 @@ export const router = createBrowserRouter([
       }, {
         path: ":communeId/channel/:channelId",
         Component: Channel
+      }, {
+        path: ":communeId/manage",
+        Component: CommuneManage
       }
     ]
   },

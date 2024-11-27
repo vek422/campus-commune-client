@@ -127,7 +127,7 @@
     --destructive-foreground: 0 0% 100%;
     --ring: 229 100% 62%;
   } */
-  :root {
+  /* :root {
     --background: 222 55% 100%;
     --foreground: 222 54% 1%;
     --muted: 192 35% 85%;
@@ -170,6 +170,50 @@
     --destructive: 6 95% 45%;
     --destructive-foreground: 0 0% 100%;
     --ring: 222 25% 83%;
+  } */
+  :root {
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 0%; /* Black */
+    --muted: 0 0% 96%; /* Light gray */
+    --muted-foreground: 0 0% 30%; /* Dark gray */
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 0%; /* Black */
+    --border: 0 0% 90%; /* Very light gray */
+    --input: 0 0% 90%; /* Very light gray */
+    --primary: 270 40% 85%; /* Lavender */
+    --primary-foreground: 270 40% 25%; /* Dark lavender */
+    --secondary: 0 0% 90%; /* Very light gray */
+    --secondary-foreground: 0 0% 20%; /* Dark gray */
+    --accent: 270 40% 85%; /* Lavender */
+    --accent-foreground: 270 40% 25%; /* Dark lavender */
+    --destructive: 0 80% 50%; /* Red for alerts */
+    --destructive-foreground: 0 0% 100%; /* White */
+    --ring: 270 40% 85%; /* Lavender */
+    --radius: 0.5rem; /* Border radius */
+  }
+
+  .dark {
+    --background: 0 0% 0%; /* Pitch black */
+    --foreground: 0 0% 100%; /* White */
+    --muted: 0 0% 10%; /* Dark gray */
+    --muted-foreground: 0 0% 70%; /* Light gray */
+    --popover: 0 0% 10%; /* Dark gray */
+    --popover-foreground: 0 0% 100%; /* White */
+    --card: 0 0% 10%; /* Dark gray */
+    --card-foreground: 0 0% 100%; /* White */
+    --border: 0 0% 20%; /* Very dark gray */
+    --input: 0 0% 20%; /* Very dark gray */
+    --primary: 270 40% 85%; /* Lavender */
+    --primary-foreground: 270 40% 25%; /* Dark lavender */
+    --secondary: 0 0% 20%; /* Very dark gray */
+    --secondary-foreground: 0 0% 80%; /* Light gray */
+    --accent: 270 40% 85%; /* Lavender */
+    --accent-foreground: 270 40% 25%; /* Dark lavender */
+    --destructive: 0 80% 50%; /* Red for alerts */
+    --destructive-foreground: 0 0% 100%; /* White */
+    --ring: 270 40% 85%; /* Lavender */
   }
 }
 @layer base {
