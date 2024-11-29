@@ -100,8 +100,20 @@ const communeSlice = createSlice({
             state.communes[action.payload.communeId].roles[action.payload.userId] = action.payload.role;
             console.log("Role Assigned")
         },
+        addChannel: (state, action: PayloadAction<{ channel: Channel, communeId: string }>) => {
+            if (!state.communes[action.payload.communeId]) {
+                console.log("No Commune Found Returning")
+                return
+            }
+            if (!state.channels) {
+                state.channels = {}
+            }
+            state.channels[action.payload.channel._id] = { ...action.payload.channel, threads: [] };
+            state.communes[action.payload.communeId].channels.push(action.payload.channel._id)
+        },
         addChannels: (state, action: PayloadAction<{ channels: Channel[], communeId: string }>) => {
             // check if commune exists
+            console.log("Commune ID", action.payload.communeId)
             if (!state.communes[action.payload.communeId]) {
                 console.log("No Commune Found Returning")
                 return
@@ -121,16 +133,15 @@ const communeSlice = createSlice({
         addThreads: (state, action: PayloadAction<Thread[]>) => {
 
             if (action.payload.length === 0) return;
-            if (!state.channels[action.payload[0].channelId]) {
-                console.log("No Channel Found Returning")
-                return
-            };
-            if (!state.threads) state.threads = {}
+            // if (!state.threads) state.threads = {}
             action.payload.forEach((thread) => {
                 state.threads[thread._id] = thread;
-                // if (!state.channels[thread._id]?.threads.includes(thread._id))
-                state.channels[thread.channelId]?.threads.push(thread._id);
+                if (state.channels[action.payload[0].channelId]) {
+                    console.log("No Channel Found Returning")
+                    state.channels[thread.channelId]?.threads.push(thread._id);
+                };
             })
+
 
         },
         addThreadFront: (state, action: PayloadAction<Thread>) => {
@@ -156,5 +167,5 @@ const communeSlice = createSlice({
     }
 });
 
-export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront, removeThread, addRole, assignRole } = communeSlice.actions;
+export const { addCommune, addThreads, addChannels, addCommunes, addThreadFront, removeThread, addRole, assignRole, addChannel } = communeSlice.actions;
 export default communeSlice.reducer;

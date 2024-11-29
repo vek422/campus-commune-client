@@ -9,6 +9,8 @@ import CommuneLayout from "./pages/Commune/CommuneLayout";
 import CommuneHome from "./pages/Commune/CommuneHome";
 import Channel from "./pages/Commune/Channel";
 import CommuneManage from "./pages/Commune/CommuneManage";
+import SearchThread from "./pages/SearchThread";
+import ThreadDetail from "./pages/Commune/ThreadDetail";
 
 export const router = createBrowserRouter([
   {
@@ -21,15 +23,19 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    Component: withAuthGaurd(Home),
+    Component: withAuthGaurd(SearchThread),
   },
   {
     path: "/commune/create-commune",
     Component: withAuthGaurd(CreateCommune),
   },
   {
-    path: "/explore",
+    path: "/communes",
     Component: withAuthGaurd(Explore)
+  },
+  {
+    path: "/thread-search",
+    Component: withAuthGaurd(SearchThread)
   },
   {
     path: "/commune",
@@ -41,7 +47,12 @@ export const router = createBrowserRouter([
       }, {
         path: ":communeId/channel/:channelId",
         Component: Channel
-      }, {
+      },
+      {
+        path: ":communeId/channel/:channelId/thread/:threadId",
+        Component: ThreadDetail
+      },
+      {
         path: ":communeId/manage",
         Component: CommuneManage
       }

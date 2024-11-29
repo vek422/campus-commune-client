@@ -14,7 +14,6 @@ export const useFetchCommunes = () => {
     const { toast } = useToast();
 
     const searchCommune = async (search: string) => {
-
         if (!search) return;
         try {
             setIsLoading(true)

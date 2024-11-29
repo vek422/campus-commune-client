@@ -14,33 +14,41 @@ import { usePostCommentReply } from "@/hooks/api/usePostCommentReply";
 import { useFetchCommentReplies } from "@/hooks/api/useFetchCommentReplies";
 import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { useDeleteThread } from "@/hooks/api/useDeleteThread";
-import { useParams } from "react-router-dom";
-import ThreadDropdown from "./ThreadDropdown";
 
-export function Thread({ thread }) {
+import ThreadDropdown from "./ThreadDropdown";
+import { Link } from "react-router-dom";
+
+export function Thread({ thread, showContext = true }) {
   const [showComments, setShowComments] = useState(false);
   return (
     <Card
+      id={thread?._id}
       className="w-full  h-auto bg-secondary/5 border border-secondary rounded-xl p-2 
     flex flex-col gap-2  relative"
     >
       <div className="absolute right-0 ">
-        <ThreadDropdown
-          threadId={thread._id}
-          createdBy={thread.createdBy}
-          channelId={thread.channelId}
-          communeId={thread.communeId}
-        />
+        {showContext && (
+          <ThreadDropdown
+            threadId={thread?._id}
+            createdBy={thread?.createdBy}
+            channelId={thread?.channelId}
+            communeId={thread?.communeId}
+          />
+        )}
       </div>
       <div className="flex gap-2 ">
         <Avatar className="h-7 w-7">
           <AvatarImage
-            src={`${BACKEND_BASE_URL}/static/${thread?.createdBy.profileUri}`}
+            src={`${BACKEND_BASE_URL}/static/${thread?.createdBy?.profileUri}`}
             className="object-cover"
           />
           <AvatarFallback className="text-xs">
-            {thread?.createdBy?.firstName[0] + thread?.createdBy?.lastName[0]}
+            {thread?.createdBy?.firstName.length > 0
+              ? thread.createdBy?.firstName[0]
+              : ""}{" "}
+            {thread?.createdBy?.lastName.length > 0
+              ? thread?.createdBy?.lastName[0]
+              : ""}
           </AvatarFallback>
         </Avatar>
         <div className="flex gap-1 flex-col w-full">
@@ -48,20 +56,34 @@ export function Thread({ thread }) {
             <p className="text-sm">{`${thread?.createdBy?.firstName} ${thread?.createdBy?.lastName}`}</p>
             <p className="text-xs">{calculateAge(thread?.createdAt)}</p>
           </div>
-          <h1 className="text-xl font-bold">{thread?.title}</h1>
+          <Link
+            to={`/commune/${thread?.communeId}/channel/${thread?.channelId}/thread/${thread._id}`}
+          >
+            <h1 className="text-xl font-bold hover:text-secondary-foreground hover:underline underline-offset-2">
+              {thread?.title}
+            </h1>
+          </Link>
           <p className="text-sm font-semibold">{thread?.content}</p>
           <ThreadMedia images={thread?.imagesUri} />
-          <ThreadToolbar
-            toggleComment={() => setShowComments((state) => !state)}
-          />
-          {showComments && <ThreadComments thread={thread} />}
+
+          {showContext && (
+            <ThreadToolbar
+              toggleComment={() => setShowComments((state) => !state)}
+            />
+          )}
+          {showContext && showComments && <ThreadComments thread={thread} />}
         </div>
       </div>
     </Card>
   );
 }
 
-const ThreadMedia = ({ images }: { images?: string[]; videos?: string[] }) => {
+export const ThreadMedia = ({
+  images,
+}: {
+  images?: string[];
+  videos?: string[];
+}) => {
   return (
     <div className="flex gap-2">
       {images?.map((imageUri) => (
@@ -132,7 +154,7 @@ function AddThreadComment({ threadId, addCommentOptmistically }) {
   );
 }
 
-function ThreadComments({ thread }) {
+export function ThreadComments({ thread }) {
   const {
     comments,
     isLoading,
@@ -150,14 +172,17 @@ function ThreadComments({ thread }) {
         threadId={thread._id}
         addCommentOptmistically={addCommentOptimistically}
       />
-      {comments &&
+      {comments && comments.length ? (
         comments.map((comment) => (
           <ThreadCommentCard
             key={comment._id}
             comment={comment}
             threadId={thread._id}
           />
-        ))}
+        ))
+      ) : (
+        <p className="pt-5 w-full text-center">No Comments</p>
+      )}
       {isLoading && <p>Loading...</p>}
       {hasMore && (
         <Button

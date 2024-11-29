@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import CommuneRoles from "./Components/CommuneRoles";
 import CommuneMembers from "./CommuneMembers";
 import PermissionList from "./Components/PermissionList";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function CommuneManage() {
   const { communeId = "" } = useParams();
@@ -17,7 +18,7 @@ export default function CommuneManage() {
       <div className="w-3/4 flex flex-col gap-2">
         {/* the top section starts */}
         <div className="flex h-44 gap-4 ">
-          <div className="rounded-2xl w-44 h-44 shadow-lg border">
+          <div className="rounded-2xl min-w-44 min-h-44 shadow-lg border max-w-44 max-h-44">
             <img
               src={`${BACKEND_BASE_URL}/static/${commune?.profileUri}`}
               alt="commune"
@@ -36,9 +37,9 @@ export default function CommuneManage() {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-semibold text-secondary-foreground">
+              <ScrollArea className="text-md w-[90%] text-secondary-foreground h-32">
                 {commune?.description}
-              </p>
+              </ScrollArea>
               <Button
                 size={"icon"}
                 className="rounded-full p-0 m-0 h-7 w-7"

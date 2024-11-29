@@ -47,8 +47,7 @@ export default function Channel() {
             threads?.map((thread) => {
               return <Thread key={thread._id} thread={thread} />;
             })}
-          {isLoading &&
-            new Array(4).map((_, index) => <ThreadCardLoader key={index} />)}
+
           {hasMore && (
             <Button onClick={() => fetchChannel()} variant={"link"}>
               Load More

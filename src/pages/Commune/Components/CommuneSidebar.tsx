@@ -2,6 +2,7 @@ import { useAppSelector } from "@/store/store";
 import NavLink from "../../../components/NavLink";
 import { useParams } from "react-router-dom";
 import { createSelector } from "@reduxjs/toolkit";
+import CreateChannel from "./CreateChannel";
 
 const selectChannel = createSelector(
   (state) => state.commune.communes,
@@ -20,12 +21,14 @@ export default function CommuneSidebarNav() {
       <div className="flex flex-col ">
         <h2 className="text-lg font-semibold">General</h2>
         <NavLink href="/">Home</NavLink>
-        <NavLink href="/explore">Explore</NavLink>
+        <NavLink href="/communes">Commune</NavLink>
         <NavLink href="/">Saved Threads</NavLink>
-        <NavLink href="/">Drafts</NavLink>
       </div>
       <div className="flex flex-col">
-        <h2 className="text-lg font-semibold">Channels</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Channels</h2>
+          <CreateChannel />
+        </div>
         <div className="overflow-scroll max-h-[20vh] flex flex-col">
           {channels &&
             channels.map((channel) => (

@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import PageLayout from "./PageLayout";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { CommuneCard } from "@/components/CommuneCard";
 import { useFetchCommunes } from "@/hooks/api/useFetchCommunes";
 import { useEffect, useMemo, useState } from "react";
@@ -19,6 +19,7 @@ export default function Explore() {
   useEffect(() => {
     fetchCommune();
   }, []);
+
   return (
     <PageLayout>
       <div className="w-full flex justify-center flex-col items-center">
@@ -43,28 +44,38 @@ export default function Explore() {
         </form>
 
         <div className="w-full h-screen pb-32 flex flex-wrap gap-8 pt-10 overflow-scroll">
-          {searchedCommunes?.length > 0
-            ? searchedCommunes?.map((commune) => (
-                <CommuneCard
-                  img={commune?.profileUri}
-                  description={commune?.description}
-                  name={commune?.name}
-                  communeId={commune?._id}
-                />
-              ))
-            : communes &&
-              communes?.map((commune) => (
-                <CommuneCard
-                  img={commune?.profileUri}
-                  description={commune?.description}
-                  name={commune?.name}
-                  communeId={commune?._id}
-                />
-              ))}
+          {isLoading ? (
+            <div className="flex justify-center items-center h-[82vh] w-full">
+              <div className="animate-spin ">
+                <Loader2 size={24} />
+              </div>
+            </div>
+          ) : searchedCommunes?.length > 0 ? (
+            searchedCommunes?.map((commune) => (
+              <CommuneCard
+                img={commune?.profileUri}
+                description={commune?.description}
+                name={commune?.name}
+                communeId={commune?._id}
+              />
+            ))
+          ) : (
+            communes &&
+            communes?.map((commune) => (
+              <CommuneCard
+                img={commune?.profileUri}
+                description={commune?.description}
+                name={commune?.name}
+                communeId={commune?._id}
+              />
+            ))
+          )}
           <div className="w-full flex justify-center ">
-            <Button variant={"link"} onClick={fetchCommune}>
-              Load More
-            </Button>
+            {hasMore && (
+              <Button variant={"link"} onClick={fetchCommune}>
+                Load More
+              </Button>
+            )}
           </div>
         </div>
       </div>
