@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Bookmark, Heart, MessageSquare } from "lucide-react";
+import { Bookmark, BookmarkCheck, Heart, MessageSquare } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { SendHorizonal } from "lucide-react";
@@ -16,7 +16,9 @@ import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 import ThreadDropdown from "./ThreadDropdown";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useSaveThread } from "@/hooks/api/useSaveThread";
+import { parseContent } from "@/lib/parseThreadContent";
 
 export function Thread({ thread, showContext = true }) {
   const [showComments, setShowComments] = useState(false);
@@ -63,11 +65,14 @@ export function Thread({ thread, showContext = true }) {
               {thread?.title}
             </h1>
           </Link>
-          <p className="text-sm font-semibold">{thread?.content}</p>
+          <p className="text-sm font-semibold">
+            {parseContent(thread?.content)}
+          </p>
           <ThreadMedia images={thread?.imagesUri} />
 
           {showContext && (
             <ThreadToolbar
+              threadId={thread._id}
               toggleComment={() => setShowComments((state) => !state)}
             />
           )}
@@ -96,12 +101,12 @@ export const ThreadMedia = ({
               className="w-44 h-44 object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
             />
           </DialogTrigger>
-          <DialogContent className="min-w-[80vw] bg-transparent">
+          <DialogContent className="min-w-[80vw] max-w-[80vw] max-h-[80vh] justify-center bg-transparent items-center">
             <img
               key={imageUri}
               src={`${BACKEND_BASE_URL}/static/${imageUri}`}
               alt="commune"
-              className=" object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
+              className=" object-cover max-h-[70vh] overflow-hidden rounded-lg border border-muted shadow-sm"
             />
           </DialogContent>
         </Dialog>
@@ -228,9 +233,9 @@ function ThreadCommentCard({ comment, threadId }) {
       <div className="pl-9 flex flex-col gap-2">
         <p className="text-sm font-semibold">{comment.content}</p>
         <div className="flex gap-2">
-          <Button size={"icon"} variant={"ghost"}>
+          {/* <Button size={"icon"} variant={"ghost"}>
             <Heart size={14} />
-          </Button>
+          </Button> */}
           <Button
             variant={"ghost"}
             size={"icon"}
@@ -311,7 +316,7 @@ function PostCommentReply({ commentId, threadId, addReplyOptimistically }) {
   );
 }
 
-function ThreadToolbar({ toggleComment }) {
+function ThreadToolbar({ toggleComment, threadId }) {
   return (
     <div className="h-10 rounded-lg flex items-center max-w-min ">
       <Button
@@ -322,12 +327,13 @@ function ThreadToolbar({ toggleComment }) {
       >
         <MessageSquare size={16} />
       </Button>
-      <Button variant={"ghost"} className="" size={"icon"}>
-        <Heart size={16} />
-      </Button>
-      <Button variant={"ghost"} size={"icon"}>
-        <Bookmark size={16} />
-      </Button>
+      {/* <Button
+        variant={isSaved ? "secondary" : "ghost"}
+        size={"icon"}
+        onClick={() => saveThread(threadId)}
+      >
+        {isSaved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+      </Button> */}
     </div>
   );
 }

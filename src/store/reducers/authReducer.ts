@@ -12,6 +12,8 @@ interface User {
   comments: object[] | string[];
   createdAt: string;
   updatedAt: string;
+  savedCommune: string[];
+  savedThreads: string[];
   globalRole: {
     name: string;
     permissions: string[];
@@ -37,6 +39,9 @@ const authSlice = createSlice({
     updateUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
+    saveThread: (state, action: PayloadAction<{ _id: string }>) => {
+      state.user?.savedThreads.push(action.payload._id)
+    },
     login: (state, action: PayloadAction<AuthState>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -55,5 +60,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout, updateUser, joinCommune, leaveCommune } = authSlice.actions;
+export const { login, logout, updateUser, joinCommune, leaveCommune, saveThread } = authSlice.actions;
 export default authSlice.reducer;

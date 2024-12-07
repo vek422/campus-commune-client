@@ -16,7 +16,7 @@ export default function SidebarNav() {
         <h2 className="text-lg font-semibold">General</h2>
         <NavLink href="/">Home</NavLink>
         <NavLink href="/communes">Commune</NavLink>
-        <NavLink href="/">Saved Threads</NavLink>
+        {/* <NavLink href="/">Saved Threads</NavLink> */}
       </div>
       <div className="flex flex-col overflow-x-hidden">
         <h2 className="text-lg font-semibold ">Communes</h2>
