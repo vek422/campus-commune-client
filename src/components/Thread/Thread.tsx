@@ -41,7 +41,7 @@ export function Thread({ thread, showContext = true }) {
       <div className="flex gap-2 ">
         <Avatar className="h-7 w-7">
           <AvatarImage
-            src={`${BACKEND_BASE_URL}/static/${thread?.createdBy?.profileUri}`}
+            src={thread?.createdBy?.profileUri}
             className="object-cover"
           />
           <AvatarFallback className="text-xs">
@@ -96,7 +96,7 @@ export const ThreadMedia = ({
           <DialogTrigger>
             <img
               key={imageUri}
-              src={`${BACKEND_BASE_URL}/static/${imageUri}`}
+              src={imageUri}
               alt="commune"
               className="w-44 h-44 object-cover overflow-hidden rounded-lg border border-muted shadow-sm"
             />
@@ -104,7 +104,7 @@ export const ThreadMedia = ({
           <DialogContent className="min-w-[80vw] max-w-[80vw] max-h-[80vh] justify-center bg-transparent items-center">
             <img
               key={imageUri}
-              src={`${BACKEND_BASE_URL}/static/${imageUri}`}
+              src={imageUri}
               alt="commune"
               className=" object-cover max-h-[70vh] overflow-hidden rounded-lg border border-muted shadow-sm"
             />
@@ -133,10 +133,7 @@ function AddThreadComment({ threadId, addCommentOptmistically }) {
   return (
     <div className=" flex gap-2 items-center w-full">
       <Avatar className="w-7 h-7">
-        <AvatarImage
-          src={`${BACKEND_BASE_URL}/static/${user?.profileUrl}`}
-          className="object-cover"
-        />
+        <AvatarImage src={user?.profileUrl} className="object-cover" />
         <AvatarFallback>
           {`${user?.firstName[0]}${user?.lastName[0]}`}
         </AvatarFallback>

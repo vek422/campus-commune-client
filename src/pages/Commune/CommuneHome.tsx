@@ -24,7 +24,7 @@ export default function CommuneHome() {
         <div className="gap-5 h-52  relative flex items-center pl-5 bg-accent rounded-xl overflow-hidden ">
           <div className="rounded-2xl min-w-44 min-h-44 h-44 w-44">
             <img
-              src={`${BACKEND_BASE_URL}/static/${commune?.profileUri}`}
+              src={commune?.profileUri}
               alt="commune"
               className="w-full h-full object-cover overflow-hidden rounded-xl"
             />

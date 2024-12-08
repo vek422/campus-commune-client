@@ -20,7 +20,7 @@ export default function CommuneManage() {
         <div className="flex h-44 gap-4 ">
           <div className="rounded-2xl min-w-44 min-h-44 shadow-lg border max-w-44 max-h-44">
             <img
-              src={`${BACKEND_BASE_URL}/static/${commune?.profileUri}`}
+              src={commune?.profileUri}
               alt="commune"
               className="w-full h-full object-cover overflow-hidden rounded-xl"
             />

@@ -37,7 +37,7 @@ const ThreadDetail = () => {
           <div className="flex items-center gap-2">
             <Avatar className="h-7 w-7">
               <AvatarImage
-                src={`${BACKEND_BASE_URL}/static/${thread?.createdBy?.profileUri}`}
+                src={thread?.createdBy?.profileUri}
                 className="object-cover"
               />
               <AvatarFallback className="text-xs">

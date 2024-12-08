@@ -18,7 +18,7 @@ export function CommuneCard({
     <Card className="w-48 max-h-min flex items-center flex-col p-2 gap-1">
       <CardHeader className="p-2">
         <img
-          src={`${BACKEND_BASE_URL}/static/${img}`}
+          src={img}
           alt="commune image"
           className="w-24 h-24 object-cover rounded-full"
         />
