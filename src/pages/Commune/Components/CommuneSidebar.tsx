@@ -3,13 +3,16 @@ import NavLink from "../../../components/NavLink";
 import { useParams } from "react-router-dom";
 import { createSelector } from "@reduxjs/toolkit";
 import CreateChannel from "./CreateChannel";
+import { Channel } from "@/store/reducers/CommuneReducer";
 
 const selectChannel = createSelector(
   (state) => state.commune.communes,
   (state) => state.commune.channels,
-  (state, communeId) => communeId,
+  (_state, communeId: string) => communeId,
   (communes, channels, communeId) =>
-    communes[communeId]?.channels?.map((channelId) => channels[channelId])
+    communes[communeId]?.channels?.map(
+      (channelId: string) => channels[channelId]
+    )
 );
 
 export default function CommuneSidebarNav() {
@@ -31,7 +34,7 @@ export default function CommuneSidebarNav() {
         </div>
         <div className="overflow-scroll max-h-[20vh] flex flex-col">
           {channels &&
-            channels.map((channel) => (
+            channels.map((channel: Channel) => (
               <NavLink
                 key={channel._id}
                 href={`/commune/${communeId}/channel/${channel._id}`}

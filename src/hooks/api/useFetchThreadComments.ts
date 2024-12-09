@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
+import { Comment as CommentType } from "@/store/reducers/CommuneReducer";
 import axios from "axios";
 import { useState } from "react";
 
 export const useFetchThreadComments = (threadId: string) => {
-    const [comments, setComments] = useState<Comment[]>([]);
+    const [comments, setComments] = useState<CommentType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
@@ -26,13 +28,13 @@ export const useFetchThreadComments = (threadId: string) => {
                 setPage(state => state + 1);
                 setHasMore(data.hasMore)
             }
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message);
         } finally {
             setIsLoading(false)
         }
     }
-    const addCommentOptimistically = (comment) => {
+    const addCommentOptimistically = (comment: CommentType) => {
         setComments(state => [comment, ...state]);
     }
 

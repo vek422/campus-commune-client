@@ -41,7 +41,7 @@ const registerSchema = z
   });
 
 export const RegisterForm: FC = () => {
-  const { register, isLoading, error, data } = useRegister();
+  const { register, isLoading, error } = useRegister();
   const { toast } = useToast();
   const form = useForm<typeof initialValues>({
     resolver: zodResolver(registerSchema),

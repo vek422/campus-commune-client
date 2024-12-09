@@ -3,13 +3,13 @@ import { useState } from "react"
 import { useToast } from "../use-toast"
 import axios from "axios"
 import { BACKEND_BASE_URL } from "@/config/config"
-import { addThreads } from "@/store/reducers/CommuneReducer"
+import { addThreads, Thread } from "@/store/reducers/CommuneReducer"
 
 export const useSearchThread = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAppSelector(state => state.auth)
     const { toast } = useToast();
-    const [threads, setThreads] = useState([]);
+    const [threads, setThreads] = useState<Thread[]>([]);
     const dispatch = useAppDispatch()
     const searchThread = async (search: string) => {
         if (!search) return;

@@ -35,7 +35,7 @@ export default function ChangeRoleDialog({
   user: { firstName: string; lastName: string; role: string; _id: string };
 }) {
   const { communeId = "" } = useParams();
-  const { isLoading, assignRole } = useAssignRole(communeId);
+  const { assignRole } = useAssignRole(communeId);
   const [open, setOpen] = useState(false);
   const [roleId, setRoleId] = useState("");
 

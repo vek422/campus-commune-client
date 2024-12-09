@@ -19,9 +19,9 @@ export default function ThreadDropdown({
   channelId: string;
   threadId: string;
   communeId: string;
-  createdBy: string;
+  createdBy: { _id: string };
 }) {
-  const { isLoading, deleteThread } = useDeleteThread({
+  const { deleteThread } = useDeleteThread({
     channelId: channelId,
     communeId: communeId,
   });

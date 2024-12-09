@@ -16,7 +16,7 @@ export const useJoinCommune = (communeId: string) => {
   const joinCommune = async (userId: string) => {
     try {
       setIsLoading(true);
-      const { data, status } = await axios.post(
+      const { status } = await axios.post(
         `${BACKEND_BASE_URL}/commune/join`,
         {
           userId,

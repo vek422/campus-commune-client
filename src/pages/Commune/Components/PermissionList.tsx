@@ -1,15 +1,10 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useFetchCommunePermissions } from "@/hooks/api/useFetchCommunePermissions";
-import { useEffect } from "react";
 
 export default function PermissionList() {
-  const {
-    isLoading,
-    fetchCommunePermissions,
-    communePermissions,
-    channelPermissions,
-  } = useFetchCommunePermissions();
+  const { communePermissions, channelPermissions } =
+    useFetchCommunePermissions();
 
   return (
     <div className="w-56  bg-secondary/50  rounded-md">

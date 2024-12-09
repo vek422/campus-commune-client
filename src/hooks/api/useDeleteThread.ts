@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BACKEND_BASE_URL } from "@/config/config";
 import { removeThread } from "@/store/reducers/CommuneReducer";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -31,11 +32,10 @@ export const useDeleteThread = ({ channelId, communeId }: { channelId: string, c
                 })
 
             }
-        } catch (err) {
+        } catch (err: any) {
             console.log(err.message);
             toast({
                 title: "Failed to delete thread",
-                status: "error",
                 variant: "destructive"
             })
         } finally {

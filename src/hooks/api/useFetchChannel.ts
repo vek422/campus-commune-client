@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
 
-import { addChannels, addThreads } from "@/store/reducers/CommuneReducer";
+import { addThreads } from "@/store/reducers/CommuneReducer";
 
 export const useFetchChannel = ({ communeId, channelId }: { communeId: string | undefined, channelId: string | undefined }) => {
 

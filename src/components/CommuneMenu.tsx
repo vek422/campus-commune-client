@@ -12,10 +12,10 @@ import { useAppSelector } from "@/store/store";
 import { Link } from "react-router-dom";
 
 export default function CommuneMenu({ communeId }: { communeId: string }) {
-  const { leaveCommune, isLoading, success } = useJoinCommune(communeId);
+  const { leaveCommune } = useJoinCommune(communeId);
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const { user } = useAppSelector((state) => state.auth);
-  const isAdmin = commune?.roles[user?._id]?.name === "admin";
+  const isAdmin = commune?.roles[user?._id as string]?.name === "admin";
 
   return (
     <DropdownMenu>
@@ -33,7 +33,7 @@ export default function CommuneMenu({ communeId }: { communeId: string }) {
           )}
           <DropdownMenuItem
             className="cursor-pointer w-full text-destructive focus:bg-destructive focus:text-destructive-foreground"
-            onClick={() => leaveCommune(user?._id)}
+            onClick={() => leaveCommune(user?._id as string)}
           >
             Leave Commune
           </DropdownMenuItem>

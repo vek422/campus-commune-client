@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import { withAuthGaurd } from "./components/AuthGaurd";
-import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import CreateCommune from "./pages/Commune/CreateCommune";
 import CommuneLayout from "./pages/Commune/CommuneLayout";

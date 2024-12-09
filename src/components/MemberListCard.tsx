@@ -1,12 +1,9 @@
-import { Ellipsis, EllipsisVertical } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
 import MemberListMenu from "@/pages/Commune/Components/MemberListMenu";
 import { useAppSelector } from "@/store/store";
 
 export const MemberListCard = ({
-  profileUri,
   firstName,
   lastName,
   _id,
@@ -20,7 +17,8 @@ export const MemberListCard = ({
   role: string;
   showContextMenu: boolean;
 }) => {
-  const { _id: userId } = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector((state) => state.auth.user);
+  const userId = user?._id;
   return (
     <div className="flex items-center gap-2 hover:bg-secondary/60 p-1 rounded-lg hover:text-secondary-foreground transition-all duration-300 cursor-pointer">
       <Avatar className="h-7 w-7 text-inherit">

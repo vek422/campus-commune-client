@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Bookmark, BookmarkCheck, Heart, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { SendHorizonal } from "lucide-react";
-import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
 import { useFetchThreadComments } from "@/hooks/api/useFetchThreadComments";
 import { LoadingButton } from "../ui/loadingButton";
@@ -14,14 +13,23 @@ import { usePostCommentReply } from "@/hooks/api/usePostCommentReply";
 import { useFetchCommentReplies } from "@/hooks/api/useFetchCommentReplies";
 import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-
+import { Comment as CommentType } from "@/store/reducers/CommuneReducer";
 import ThreadDropdown from "./ThreadDropdown";
-import { Link, useParams } from "react-router-dom";
-import { useSaveThread } from "@/hooks/api/useSaveThread";
+import { Link } from "react-router-dom";
 import { parseContent } from "@/lib/parseThreadContent";
+import { Thread as ThreadType } from "@/store/reducers/CommuneReducer";
 
-export function Thread({ thread, showContext = true }) {
+export function Thread({
+  thread,
+  showContext = true,
+}: {
+  thread: ThreadType;
+  showContext?: boolean;
+}) {
   const [showComments, setShowComments] = useState(false);
+  const createdBy =
+    typeof thread?.createdBy == "string" ? null : thread?.createdBy;
+  if (!createdBy) return null;
   return (
     <Card
       id={thread?._id}
@@ -32,7 +40,9 @@ export function Thread({ thread, showContext = true }) {
         {showContext && (
           <ThreadDropdown
             threadId={thread?._id}
-            createdBy={thread?.createdBy}
+            createdBy={{
+              _id: createdBy?._id,
+            }}
             channelId={thread?.channelId}
             communeId={thread?.communeId}
           />
@@ -40,22 +50,15 @@ export function Thread({ thread, showContext = true }) {
       </div>
       <div className="flex gap-2 ">
         <Avatar className="h-7 w-7">
-          <AvatarImage
-            src={thread?.createdBy?.profileUri}
-            className="object-cover"
-          />
+          <AvatarImage src={createdBy?.profile_uri} className="object-cover" />
           <AvatarFallback className="text-xs">
-            {thread?.createdBy?.firstName.length > 0
-              ? thread.createdBy?.firstName[0]
-              : ""}{" "}
-            {thread?.createdBy?.lastName.length > 0
-              ? thread?.createdBy?.lastName[0]
-              : ""}
+            {createdBy?.firstName.length > 0 ? createdBy?.firstName[0] : ""}{" "}
+            {createdBy?.lastName.length > 0 ? createdBy?.lastName[0] : ""}
           </AvatarFallback>
         </Avatar>
         <div className="flex gap-1 flex-col w-full">
           <div className="flex items-end gap-2">
-            <p className="text-sm">{`${thread?.createdBy?.firstName} ${thread?.createdBy?.lastName}`}</p>
+            <p className="text-sm">{`${createdBy?.firstName} ${createdBy?.lastName}`}</p>
             <p className="text-xs">{calculateAge(thread?.createdAt)}</p>
           </div>
           <Link
@@ -72,11 +75,12 @@ export function Thread({ thread, showContext = true }) {
 
           {showContext && (
             <ThreadToolbar
-              threadId={thread._id}
               toggleComment={() => setShowComments((state) => !state)}
             />
           )}
-          {showContext && showComments && <ThreadComments thread={thread} />}
+          {showContext && showComments && (
+            <ThreadComments threadId={thread._id as string} />
+          )}
         </div>
       </div>
     </Card>
@@ -114,11 +118,17 @@ export const ThreadMedia = ({
     </div>
   );
 };
-function AddThreadComment({ threadId, addCommentOptmistically }) {
+function AddThreadComment({
+  threadId,
+  addCommentOptmistically,
+}: {
+  threadId: string;
+  addCommentOptmistically: (comment: CommentType) => void;
+}) {
   const { user } = useAppSelector((state) => state.auth);
   const [content, setContent] = useState("");
 
-  const { isLoading, error, postComment, success, savedComment } =
+  const { isLoading, postComment, success, savedComment } =
     usePostComment(threadId);
   const handlePostComment = () => {
     if (content.length > 0) postComment(content, user?._id as string);
@@ -133,7 +143,7 @@ function AddThreadComment({ threadId, addCommentOptmistically }) {
   return (
     <div className=" flex gap-2 items-center w-full">
       <Avatar className="w-7 h-7">
-        <AvatarImage src={user?.profileUrl} className="object-cover" />
+        <AvatarImage src={user?.profile_uri} className="object-cover" />
         <AvatarFallback>
           {`${user?.firstName[0]}${user?.lastName[0]}`}
         </AvatarFallback>
@@ -156,22 +166,21 @@ function AddThreadComment({ threadId, addCommentOptmistically }) {
   );
 }
 
-export function ThreadComments({ thread }) {
+export function ThreadComments({ threadId }: { threadId: string }) {
   const {
     comments,
     isLoading,
-    error,
     fetchThreadComments,
     hasMore,
     addCommentOptimistically,
-  } = useFetchThreadComments(thread._id);
+  } = useFetchThreadComments(threadId);
   useEffect(() => {
     fetchThreadComments();
   }, []);
   return (
     <div className="flex flex-col gap-2">
       <AddThreadComment
-        threadId={thread._id}
+        threadId={threadId}
         addCommentOptmistically={addCommentOptimistically}
       />
       {comments && comments.length ? (
@@ -179,7 +188,7 @@ export function ThreadComments({ thread }) {
           <ThreadCommentCard
             key={comment._id}
             comment={comment}
-            threadId={thread._id}
+            threadId={threadId}
           />
         ))
       ) : (
@@ -199,16 +208,16 @@ export function ThreadComments({ thread }) {
   );
 }
 
-function ThreadCommentCard({ comment, threadId }) {
+function ThreadCommentCard({
+  comment,
+  threadId,
+}: {
+  comment: CommentType;
+  threadId: string;
+}) {
   const [showComments, setShowComments] = useState(false);
-  const {
-    comments,
-    isLoading,
-    error,
-    fetchCommentReplies,
-    hasMore,
-    addReplyOptimistically,
-  } = useFetchCommentReplies({ threadId, commentId: comment._id });
+  const { comments, fetchCommentReplies, hasMore, addReplyOptimistically } =
+    useFetchCommentReplies({ threadId, commentId: comment?._id });
 
   useEffect(() => {
     if (showComments) fetchCommentReplies();
@@ -278,8 +287,16 @@ function ThreadCommentCard({ comment, threadId }) {
   );
 }
 
-function PostCommentReply({ commentId, threadId, addReplyOptimistically }) {
-  const { isLoading, error, success, postCommentReply, savedReply } =
+function PostCommentReply({
+  commentId,
+  threadId,
+  addReplyOptimistically,
+}: {
+  commentId: string;
+  threadId: string;
+  addReplyOptimistically: (reply: CommentType) => void;
+}) {
+  const { isLoading, success, postCommentReply, savedReply } =
     usePostCommentReply(threadId);
   const { user } = useAppSelector((state) => state.auth);
   const [content, setContent] = useState("");
@@ -288,7 +305,7 @@ function PostCommentReply({ commentId, threadId, addReplyOptimistically }) {
       postCommentReply({
         commentId,
         content,
-        createdBy: user._id,
+        createdBy: user?._id as string,
       });
   };
   useEffect(() => {
@@ -313,7 +330,7 @@ function PostCommentReply({ commentId, threadId, addReplyOptimistically }) {
   );
 }
 
-function ThreadToolbar({ toggleComment, threadId }) {
+function ThreadToolbar({ toggleComment }: { toggleComment: () => void }) {
   return (
     <div className="h-10 rounded-lg flex items-center max-w-min ">
       <Button

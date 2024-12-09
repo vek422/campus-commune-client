@@ -5,7 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserCog, UserMinus } from "lucide-react";
+import { UserMinus } from "lucide-react";
 
 import ChangeRoleDialog from "./ChangeRoleDialog";
 

@@ -17,7 +17,7 @@ export const JoinCommune = ({ commune }: { commune: Commune }) => {
           variant={hasAlreadyJoined ? "link" : "outline"}
           size="sm"
           disabled={hasAlreadyJoined}
-          onClick={() => joinCommune(user?._id)}
+          onClick={() => joinCommune(user?._id as string)}
         >
           {hasAlreadyJoined ? "Joined" : "Join"}
         </Button>

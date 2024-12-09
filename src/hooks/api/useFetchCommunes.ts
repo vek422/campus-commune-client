@@ -3,11 +3,12 @@ import { useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
 import { useToast } from "../use-toast";
+import { Commune } from "@/store/reducers/CommuneReducer";
 
 export const useFetchCommunes = () => {
     const limit = 10;
     const [hasMore, setHasMore] = useState(true);
-    const [communes, setCommunes] = useState([]);
+    const [communes, setCommunes] = useState<Commune[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [page, setPage] = useState(1);
     const { token } = useAppSelector(state => state.auth)

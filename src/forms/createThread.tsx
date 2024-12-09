@@ -13,18 +13,22 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { useCreateThread } from "@/hooks/api/useCreateThread";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { LoadingButton } from "@/components/ui/loadingButton";
 import { useAppSelector } from "@/store/store";
 
 const initialValues = {
   title: "",
   content: "",
-  images: null,
-  videos: null,
 };
+
+interface formValues {
+  title: string;
+  content: string;
+  images?: FileList;
+  videos?: FileList;
+}
 
 const schema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -35,12 +39,16 @@ const schema = z.object({
   videos: z.any().optional(),
 });
 
-export function CreateThreadForm({ closeDialog }) {
+export function CreateThreadForm({ closeDialog }: { closeDialog: () => void }) {
   const { thread, createThread, isLoading } = useCreateThread();
   const { channelId, communeId = "" } = useParams();
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
-  const onSubmit = (values: typeof initialValues) => {
-    createThread({ ...values, channelId, communeId: commune?._id });
+  const onSubmit = (values: formValues) => {
+    createThread({
+      ...values,
+      channelId: channelId as string,
+      communeId: commune?._id as string,
+    });
   };
   useEffect(() => {
     if (thread) {
@@ -64,7 +72,7 @@ export function CreateThreadForm({ closeDialog }) {
       });
     }
   };
-  const form = useForm<typeof initialValues>({
+  const form = useForm<formValues>({
     resolver: zodResolver(schema),
     defaultValues: initialValues,
   });

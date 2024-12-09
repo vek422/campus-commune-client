@@ -1,11 +1,12 @@
 import { Input } from "@/components/ui/input";
 import PageLayout from "./PageLayout";
 import { Button } from "@/components/ui/button";
-import { Loader, Loader2, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSearchThread } from "@/hooks/api/useSearchThread";
 import { useState } from "react";
 import { Thread } from "@/components/Thread/Thread";
+import FullScreenLoader from "@/components/loader";
 
 export default function SearchThread() {
   const { isLoading, searchThread, threads } = useSearchThread();
@@ -42,13 +43,7 @@ export default function SearchThread() {
             threads.
           </p>
         )}
-        {isLoading && (
-          <div className="flex justify-center items-center h-[82vh] w-full">
-            <div className="animate-spin ">
-              <Loader2 size={24} />
-            </div>
-          </div>
-        )}
+        {isLoading && <FullScreenLoader />}
         {threads && (
           <ScrollArea className="h-[82vh] w-full px-20 pt-10">
             <div className="flex flex-col gap-10">

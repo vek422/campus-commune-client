@@ -1,4 +1,3 @@
-import { BACKEND_BASE_URL } from "@/config/config";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";

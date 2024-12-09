@@ -3,15 +3,16 @@ import PageLayout from "./PageLayout";
 import { Loader2, Search } from "lucide-react";
 import { CommuneCard } from "@/components/CommuneCard";
 import { useFetchCommunes } from "@/hooks/api/useFetchCommunes";
-import { useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Commune } from "@/store/reducers/CommuneReducer";
 
 export default function Explore() {
   const { fetchCommune, hasMore, communes, isLoading, searchCommune } =
     useFetchCommunes();
-  const [searchedCommunes, setSearchedCommunes] = useState([]);
+  const [searchedCommunes, setSearchedCommunes] = useState<Commune[]>([]);
   const [searchString, setSearchString] = useState("");
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const communes = await searchCommune(searchString);
     setSearchedCommunes(communes);

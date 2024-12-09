@@ -3,7 +3,7 @@ import { useToast } from "../use-toast";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useAppSelector } from "@/store/store";
-import { addChannel, addChannels } from "@/store/reducers/CommuneReducer";
+import { addChannel } from "@/store/reducers/CommuneReducer";
 import { BACKEND_BASE_URL } from "@/config/config";
 
 export const useCreateChannel = (communeId: string) => {

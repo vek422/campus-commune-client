@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
 import { useEffect, useRef, useState } from "react"
-import { io, Socket } from "socket.io-client"
+import * as io from "socket.io-client"
+import { Socket } from "socket.io-client"
 export const useSocket = () => {
     const { user } = useAppSelector(state => state.auth)
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<string | null>(null)
-    const socketRef = useRef<Socket | null>(null);
+    const socketRef = useRef<typeof Socket | null>(null);
     // const stableOptions = useMemo(() => options, [options])
 
     useEffect(() => {
@@ -23,20 +25,19 @@ export const useSocket = () => {
         })
 
 
-        socketRef.current?.on("connect_error", (e) => {
+        socketRef.current?.on("connect_error", (e: any) => {
             setIsConnected(false)
             console.log("Error while connecting to the socket")
             setError(e.message)
         })
 
-        socketRef.current?.on("message", (e) => {
+        socketRef.current?.on("message", (e: any) => {
             console.log("Message received : ", e)
         })
 
 
 
-        const userCommunes = user?.communes.map(commune => commune._id)
-        console.log(userCommunes)
+        const userCommunes = user?.communes;
         if (user?.communes?.length > 0)
             socketRef.current?.emit('join-rooms', userCommunes, user?._id);
 

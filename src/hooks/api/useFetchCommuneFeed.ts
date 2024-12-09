@@ -1,4 +1,5 @@
 import { BACKEND_BASE_URL } from "@/config/config";
+import { Thread } from "@/store/reducers/CommuneReducer";
 import { useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -6,7 +7,7 @@ import { useEffect, useState } from "react";
 export const useFetchCommuneFeed = (communeId: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const { token } = useAppSelector(state => state.auth)
-    const [feed, setFeed] = useState([])
+    const [feed, setFeed] = useState<Thread[]>([])
 
     useEffect(() => {
         fetchCommuneFeed()

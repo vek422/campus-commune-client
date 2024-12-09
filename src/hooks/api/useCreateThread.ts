@@ -1,3 +1,5 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
 import axios from "axios";
@@ -12,7 +14,7 @@ export const useCreateThread = () => {
 
     const { toast } = useToast();
     const { token, user } = useAppSelector(state => state.auth)
-    const createThread = async (values) => {
+    const createThread = async (values: { channelId: string, title: string, communeId: string, images?: FileList, content: string }) => {
         if (!values) return;
         setIsLoading(true);
         try {
@@ -21,22 +23,24 @@ export const useCreateThread = () => {
             formData.append('channelId', values.channelId)
             formData.append('title', values.title)
             formData.append('content', values.content)
-            formData.append('createdBy', user._id)
+            formData.append('createdBy', user?._id || "")
             formData.append('communeId', values.communeId)
 
-            for (const image of values.images) {
-                formData.append('images', image)
-            }
+            if (values?.images)
+                for (const image of values?.images) {
+                    formData.append('images', image)
+                }
 
             const imagesUri: string[] = [];
-            for (const image of values.images)
-                imagesUri.push(image.name)
+            if (values?.images)
+                for (const image of values?.images)
+                    imagesUri.push(image.name)
 
             imagesUri.forEach((image, index) => {
                 formData.append(`imagesUri[${index}]`, image);
             })
 
-            const { data, status } = await axios.postForm(`${BACKEND_BASE_URL}/thread`, formData, {
+            const { data } = await axios.postForm(`${BACKEND_BASE_URL}/thread`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
@@ -50,8 +54,7 @@ export const useCreateThread = () => {
             })
 
             //update the store
-
-        } catch (err) {
+        } catch (err: any) {
             setError(err.message)
         } finally {
             setIsLoading(false)

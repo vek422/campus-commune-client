@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Commune } from "./CommuneReducer";
 
-
-interface User {
+export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  communes: Commune[] | string[];
+  communes: string[];
   friends: User[] | string[];
-  profileUrl: string;
+  profile_uri: string;
   comments: object[] | string[];
   createdAt: string;
   updatedAt: string;
@@ -55,7 +53,8 @@ const authSlice = createSlice({
       state.user?.communes.push(action.payload)
     },
     leaveCommune: (state, action: PayloadAction<string>) => {
-      state.user.communes.splice(state.user.communes.indexOf(action.payload), 1)
+      if (state.user)
+        state.user.communes.splice(state.user.communes.indexOf(action.payload), 1)
     }
   },
 });

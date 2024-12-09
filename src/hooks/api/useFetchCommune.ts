@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL } from "@/config/config";
-import { addChannels, addCommune } from "@/store/reducers/CommuneReducer";
+import { addCommune, Channel, Commune } from "@/store/reducers/CommuneReducer";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import axios from "axios";
 import { useState } from "react";
@@ -25,7 +25,9 @@ export const useFetchCommune = (communeId: string | undefined) => {
             );
             if (status === 200) {
                 try {
-                    dispatch(addCommune(data.commune));
+                    const channels = data.commune.channels as Channel[];
+                    const commune = { ...data.commune, channels: channels.map(channel => channel._id) } as Commune;
+                    dispatch(addCommune({ commune, channels }));
                 } catch (error) {
                     console.error("Error in dispatching actions:", error);
                 }

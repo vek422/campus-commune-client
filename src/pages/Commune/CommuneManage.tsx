@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { BACKEND_BASE_URL } from "@/config/config";
 import { useAppSelector } from "@/store/store";
 import { Pencil } from "lucide-react";
 import { useParams } from "react-router-dom";

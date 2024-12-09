@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
 import { Input } from "./input";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "./button";
-const PasswordInput = ({ field }) => {
+const PasswordInput = ({ field }: { field: any }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {

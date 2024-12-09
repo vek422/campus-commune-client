@@ -1,21 +1,23 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ChannelBreadcrumbs } from "./Components/ChannelBreadcrumbs";
 import { useFetchChannel } from "@/hooks/api/useFetchChannel";
 
 import { Thread } from "@/components/Thread/Thread";
 import { CreateThread } from "@/components/Thread/CreateThread";
-import { ThreadCardLoader } from "@/components/Loaders/ThreadCardLoader";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/store/store";
 import { createSelector } from "@reduxjs/toolkit";
+import { Thread as ThreadType } from "@/store/reducers/CommuneReducer";
 
 const selectThread = createSelector(
   (state) => state.commune.channels,
   (state) => state.commune.threads,
-  (state, channelId) => channelId,
+  (_state, channelId: string) => channelId,
   (channels, threads, channelId) => {
-    return channels[channelId]?.threads.map((threadId) => threads[threadId]);
+    return channels[channelId]?.threads.map(
+      (threadId: string) => threads[threadId]
+    );
   }
 );
 
@@ -31,7 +33,7 @@ export default function Channel() {
   useEffect(() => {
     fetchChannel();
   }, []);
-
+  if (isLoading && !threads) return <div>Loading...</div>;
   return (
     <div className="flex ">
       <div className="flex flex-col h-svh w-3/4">
@@ -44,7 +46,7 @@ export default function Channel() {
         </div>
         <div className="pt-5 flex flex-col flex-1 pb-20 gap-5  w-full overflow-scroll transition-all duration-1000">
           {threads &&
-            threads?.map((thread) => {
+            threads?.map((thread: ThreadType) => {
               return <Thread key={thread._id} thread={thread} />;
             })}
 

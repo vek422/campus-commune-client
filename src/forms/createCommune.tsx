@@ -12,11 +12,11 @@ import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loadingButton";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateCommune } from "@/hooks/api/useCreateCommune";
-import { useToast } from "@/hooks/use-toast";
+
 import { useAppSelector } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
 import { z } from "zod";
@@ -26,6 +26,11 @@ const initialValues = {
   description: "",
   profileImage: null, // We'll handle this as a file, not a string URL
 };
+interface formValues {
+  name: string;
+  description: string;
+  profileImage: File | null;
+}
 
 const schema = z.object({
   name: z.string().min(3, "name must be at least 3 characters"),
@@ -43,11 +48,14 @@ export const CreateCommuneForm: FC = () => {
     defaultValues: initialValues,
   });
 
-  const onSubmit = (values: typeof initialValues) => {
+  const onSubmit = (values: formValues) => {
     createCommune({
       ...values,
       createdBy: user?._id as string,
-      profileUri: values?.profileImage?.name,
+      profileUri:
+        values.profileImage && typeof values.profileImage == typeof File
+          ? values?.profileImage.name
+          : "",
     });
   };
   const [imagePreview, setImagePreview] = useState<string | null>(null);

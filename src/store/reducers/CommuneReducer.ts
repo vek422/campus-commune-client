@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ChangeEvent } from "react";
+import { User } from "./authReducer";
 
 export interface Commune {
     _id: string;
     name: string;
     description: string;
     profileUri: string;
-    members: string[] | object[];
+    members: string[] | User[];
     channels: string[];
     createdBy: string | object;
     createdAt: Date;
@@ -27,11 +27,14 @@ export interface Channel {
 
 export interface Thread {
     title: string;
-    description: string;
-    createdBy: string | object;
+    content: string;
+    createdBy: string | User;
     createdAt: Date;
     updatedAt: Date;
     _id: string;
+    imagesUri: string[];
+    channelId: string
+    communeId: string
 }
 export interface CommuneState {
     communes: { [key: string]: Commune };
@@ -45,6 +48,16 @@ export interface Role {
     permissions: string[]
 }
 
+export interface Comment {
+    _id: string,
+    content: string,
+    createdBy: User,
+    createdAt: Date,
+    updatedAt: Date,
+    threadId: string,
+    imagesUri: string[]
+}
+
 const initialState: CommuneState = {
     communes: {},
     channels: {},
@@ -56,34 +69,29 @@ const communeSlice = createSlice({
     initialState,
     reducers: {
 
-        addCommune: (state, action: PayloadAction<Commune>) => {
+        addCommune: (state, action: PayloadAction<{ commune: Commune, channels: Channel[] }>) => {
             //only add commune related data ,no channel ,no threads
-            state.communes[action.payload._id] = {
-                ...action.payload,
-                channels: action.payload.channels.map(channel => channel._id)
+            if (typeof action.payload.channels[0] == "string") {
+                console.log("Error in adding Commune, Invalid Data")
+                return
+            }
+            const channels = action.payload.channels as Channel[];
+            state.communes[action.payload.commune._id] = {
+                ...action.payload.commune,
+                channels: channels.map((channel: Channel) => channel._id)
             };
             if (!state.channels) {
                 state.channels = {};
             }
-
-            action.payload.channels.forEach((channel: any) => {
+            channels.forEach((channel: Channel) => {
                 state.channels[channel._id] = { ...channel, threads: [] };
             })
         },
         addCommunes: (state, action: PayloadAction<Commune[]>) => {
             if (action.payload.length === 0) return;
-            if (typeof action.payload[0].channels[0] != "string")
-                action.payload.forEach((commune) => {
-                    state.communes[commune._id] = { ...commune, channels: commune.channels.map(channel => channel._id) }
-                    commune.channels.forEach((channel: any) => {
-                        state.channels[channel._id] = { ...channel, threads: [] };
-                    })
-                })
-            else {
-                action.payload.forEach((commune) => {
-                    state.communes[commune._id] = { ...commune, channels: [] }
-                })
-            }
+            action.payload.forEach((commune) => {
+                state.communes[commune._id] = { ...commune, channels: [] }
+            })
         },
         addRole: (state, action: PayloadAction<{ role: Role, communeId: string }>) => {
             if (!state.communes[action.payload.communeId]) {
@@ -109,7 +117,8 @@ const communeSlice = createSlice({
                 state.channels = {}
             }
             state.channels[action.payload.channel._id] = { ...action.payload.channel, threads: [] };
-            state.communes[action.payload.communeId].channels.push(action.payload.channel._id)
+
+            state.communes[action.payload.communeId].channels.push(action.payload.channel._id as string);
         },
         addChannels: (state, action: PayloadAction<{ channels: Channel[], communeId: string }>) => {
             // check if commune exists

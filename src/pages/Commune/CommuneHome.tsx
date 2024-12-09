@@ -2,11 +2,9 @@ import CommuneMenu from "@/components/CommuneMenu";
 import { JoinCommune } from "@/components/JoinCommune";
 import { MemberListCard } from "@/components/MemberListCard";
 import { Thread } from "@/components/Thread/Thread";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { BACKEND_BASE_URL } from "@/config/config";
 import { useFetchCommuneFeed } from "@/hooks/api/useFetchCommuneFeed";
+import { User } from "@/store/reducers/authReducer";
 import { useAppSelector } from "@/store/store";
 import { Loader2 } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -15,8 +13,15 @@ export default function CommuneHome() {
   const { communeId = "" } = useParams();
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const user = useAppSelector((state) => state.auth.user);
-  const hasJoineCommune = user?.communes?.includes(communeId) || false;
-  const { isLoading, fetchCommuneFeed, feed } = useFetchCommuneFeed(communeId);
+  const userCommunes = user?.communes as string[];
+  const hasJoineCommune =
+    userCommunes.length && typeof userCommunes[0] === "string"
+      ? userCommunes.includes(communeId)
+      : false;
+
+  const communeMembers = commune?.members as User[];
+
+  const { isLoading, feed } = useFetchCommuneFeed(communeId);
   return (
     <div className="flex gap-2 w-full pr-10">
       <div className="flex w-3/4 flex-col">
@@ -66,17 +71,18 @@ export default function CommuneHome() {
         </div>
 
         <ScrollArea className="flex flex-col gap-2">
-          {commune?.members.map((member) => (
-            <MemberListCard
-              showContextMenu={false}
-              key={member?._id}
-              _id={member?._id}
-              firstName={member?.firstName}
-              lastName={member?.lastName}
-              profileUri={member?.profile_uri}
-              role={commune?.roles[member?._id]?.name}
-            />
-          ))}
+          {communeMembers &&
+            communeMembers.map((member) => (
+              <MemberListCard
+                showContextMenu={false}
+                key={member?._id}
+                _id={member?._id}
+                firstName={member?.firstName}
+                lastName={member?.lastName}
+                profileUri={member?.profile_uri}
+                role={commune?.roles[member?._id]?.name}
+              />
+            ))}
         </ScrollArea>
       </div>
     </div>

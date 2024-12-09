@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import {
   addThreadFront,
   removeThread,
+  Thread,
 } from "./store/reducers/CommuneReducer.ts";
 import { useAppSelector } from "./store/store.ts";
 export default function App() {
@@ -19,14 +20,17 @@ export default function App() {
 
   useEffect(() => {
     if (socket?.connected) {
-      socket?.on("new-thread", (thread, communeId) => {
+      socket?.on("new-thread", (thread: Thread, communeId: string) => {
         console.log(`New thread in commune ${communeId}:`, thread);
         dispatch(addThreadFront(thread));
       });
-      socket?.on("deleted-thread", (threadId, channelId, communeId) => {
-        console.log(`Thread ${threadId} deleted in commune ${communeId}`);
-        dispatch(removeThread({ threadId, channelId }));
-      });
+      socket?.on(
+        "deleted-thread",
+        (threadId: string, channelId: string, communeId: string) => {
+          console.log(`Thread ${threadId} deleted in commune ${communeId}`);
+          dispatch(removeThread({ threadId, channelId }));
+        }
+      );
       socket.emit("join-rooms", communesIds, user?._id);
     }
     return () => {
