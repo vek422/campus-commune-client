@@ -1,15 +1,24 @@
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
-WORKDIR /campus-commune/frontend
+WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY . ./
 
 RUN npm run build
 
-EXPOSE 3000
+FROM nginx:alpine
 
-CMD ["npm", "start"]
+COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY default.conf /etc/nginx/templates/default.conf.template
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
