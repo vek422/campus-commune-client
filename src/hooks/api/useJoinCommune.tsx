@@ -7,20 +7,22 @@ import {
   joinCommune as joinCommuneReducer,
   leaveCommune as leaveCommuneReducer,
 } from "@/store/reducers/authReducer";
-export const useJoinCommune = (communeId: string) => {
+import { Commune } from "@/store/reducers/CommuneReducer";
+export const useJoinCommune = (commune: Commune) => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const { token } = useAppSelector((state) => state.auth);
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const joinCommune = async (userId: string) => {
+    if (!commune || !commune?._id) return;
     try {
       setIsLoading(true);
       const { status } = await axios.post(
         `${BACKEND_BASE_URL}/commune/join`,
         {
           userId,
-          communeId,
+          communeId: commune._id,
         },
         {
           headers: {
@@ -31,7 +33,8 @@ export const useJoinCommune = (communeId: string) => {
 
       if (status === 200) {
         setSuccess(true);
-        dispatch(joinCommuneReducer(communeId));
+        console.log("Dispatching the commune join reducer");
+        dispatch(joinCommuneReducer(commune));
         toast({
           title: "Success",
           description: "You have joined the commune",

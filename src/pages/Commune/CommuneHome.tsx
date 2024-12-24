@@ -13,20 +13,21 @@ export default function CommuneHome() {
   const { communeId = "" } = useParams();
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const user = useAppSelector((state) => state.auth.user);
-  const userCommunes = user?.communes as string[];
-  const hasJoineCommune =
-    userCommunes.length && typeof userCommunes[0] === "string"
-      ? userCommunes.includes(communeId)
-      : false;
+  const userCommuneIds = user?.communes.map((commune) => commune._id) || [];
+  console.log("User commune IDs : ", userCommuneIds);
 
+  const hasJoinedCommune = userCommuneIds.length
+    ? userCommuneIds.includes(communeId)
+    : false;
+  console.log("Has joined commune : ", hasJoinedCommune);
   const communeMembers = commune?.members as User[];
 
   const { isLoading, feed } = useFetchCommuneFeed(communeId);
   return (
-    <div className="flex gap-2 w-full pr-10">
-      <div className="flex w-3/4 flex-col">
+    <div className="flex gap-2 w-full md:pr-10">
+      <div className="flex md:w-3/4 flex-col  w-full">
         {/* header */}
-        <div className="gap-5 h-52  relative flex items-center pl-5 bg-accent rounded-xl overflow-hidden ">
+        <div className="gap-5 h-52 relative flex md:flex-row flex-col items-center pl-5 bg-accent md:rounded-xl overflow-hidden ">
           <div className="rounded-2xl min-w-44 min-h-44 h-44 w-44">
             <img
               src={commune?.profileUri}
@@ -40,9 +41,11 @@ export default function CommuneHome() {
               {commune?.description}
             </ScrollArea>
             <div className="absolute right-0">
-              {hasJoineCommune && <CommuneMenu communeId={communeId} />}
+              {hasJoinedCommune && <CommuneMenu communeId={communeId} />}
             </div>
-            <JoinCommune commune={commune} />
+            {!hasJoinedCommune && (
+              <JoinCommune hasJoinedCommune={hasJoinedCommune} />
+            )}
           </div>
         </div>
         <ScrollArea className="h-[60vh] py-5">
@@ -62,7 +65,7 @@ export default function CommuneHome() {
         </ScrollArea>
       </div>
 
-      <div className="w-1/4 bg-secondary/20 rounded-lg flex flex-col  max-h-[50vh] gap-2">
+      <div className="w-1/4 bg-secondary/20 rounded-lg hidden md:flex flex-col  max-h-[50vh] gap-2">
         <div className="flex gap-2 items-center bg-background border p-2 rounded-lg rounded-b-none">
           <h1 className="font-semibold text-secondary-foreground">Members</h1>
           <p className="text-xs text-muted-foreground">
