@@ -10,14 +10,15 @@ import {
   Thread,
 } from "./store/reducers/CommuneReducer.ts";
 import { useAppSelector } from "./store/store.ts";
+import { useRefreshUser } from "./hooks/api/useRefreshUser.ts";
 export default function App() {
   const dispatch = useDispatch();
   const socket = useSocket();
   const communesIds = useAppSelector((state) =>
     Object.keys(state.commune.communes)
   );
+  const { isLoading } = useRefreshUser();
   const user = useAppSelector((state) => state.auth.user);
-
   useEffect(() => {
     if (socket?.connected) {
       socket?.on("new-thread", (thread: Thread, communeId: string) => {
@@ -39,10 +40,13 @@ export default function App() {
     };
   }, [socket?.connected, communesIds, user?._id]);
 
+  if (user && isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
-    <>
+    <div>
       <RouterProvider router={router} />
       <Toaster />
-    </>
+    </div>
   );
 }

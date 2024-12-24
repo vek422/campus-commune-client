@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Commune } from "./CommuneReducer";
 
 export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  communes: string[];
+  communes: Commune[];
   friends: User[] | string[];
   profile_uri: string;
   comments: object[] | string[];
@@ -48,8 +49,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-    joinCommune: (state, action: PayloadAction<string>) => {
-      console.log("Joining commune reducer")
+    joinCommune: (state, action: PayloadAction<Commune>) => {
       state.user?.communes.push(action.payload)
     },
     leaveCommune: (state, action: PayloadAction<string>) => {
