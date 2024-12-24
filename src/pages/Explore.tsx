@@ -23,14 +23,14 @@ export default function Explore() {
 
   return (
     <PageLayout>
-      <div className="w-full flex justify-center flex-col items-center">
+      <div className="w-full flex justify-center flex-col items-center px-4 sm:px-0">
         <form
           onSubmit={handleFormSubmit}
-          className="w-1/2 flex items-center max-h-min"
+          className="w-full flex items-center max-h-min"
         >
           <Input
             placeholder="What are you looking for?"
-            className=""
+            className="w-full"
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
           />
@@ -44,7 +44,7 @@ export default function Explore() {
           </Button>
         </form>
 
-        <div className="w-full h-screen pb-32 flex flex-wrap gap-8 pt-10 overflow-scroll">
+        <div className="w-full h-screen pb-32 items-center sm:items-start flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-8 pt-10 overflow-scroll">
           {isLoading ? (
             <div className="flex justify-center items-center h-[82vh] w-full">
               <div className="animate-spin ">
@@ -54,6 +54,7 @@ export default function Explore() {
           ) : searchedCommunes?.length > 0 ? (
             searchedCommunes?.map((commune) => (
               <CommuneCard
+                key={commune?._id}
                 img={commune?.profileUri}
                 description={commune?.description}
                 name={commune?.name}
@@ -64,6 +65,7 @@ export default function Explore() {
             communes &&
             communes?.map((commune) => (
               <CommuneCard
+                key={commune?._id}
                 img={commune?.profileUri}
                 description={commune?.description}
                 name={commune?.name}
