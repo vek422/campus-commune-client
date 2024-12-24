@@ -1,22 +1,30 @@
 import { useAppSelector } from "@/store/store";
 import NavLink from "./NavLink";
-import { Button } from "./ui/button";
-import { LoaderCircle, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 import { useFetchUserCommunes } from "@/hooks/api/useFetchUserCommunes";
 
 export default function SidebarNav() {
-  const { communes } = useAppSelector((state) => state.commune);
-  const { isLoading } = useFetchUserCommunes();
-  const { user } = useAppSelector((state) => state.auth);
-
   return (
     <nav className="mt-14 py-2 rounded-lg overflow-hidden px-4 h-full flex flex-col gap-4">
+      <NavItems />
+    </nav>
+  );
+}
+
+export const NavItems = () => {
+  // const { communes } = useAppSelector((state) => state.commune);
+  const { isLoading } = useFetchUserCommunes();
+  const { user } = useAppSelector((state) => state.auth);
+  const communes = useAppSelector((state) => state.auth.user?.communes);
+  return (
+    <>
       <div className="flex flex-col ">
         <h2 className="text-lg font-semibold">General</h2>
         <NavLink href="/">Home</NavLink>
         <NavLink href="/communes">Commune</NavLink>
-        {/* <NavLink href="/">Saved Threads</NavLink> */}
+        {user && user?.globalRole?.name === "admin" && (
+          <NavLink href="/commune/create-commune">Create Commune</NavLink>
+        )}
       </div>
       <div className="flex flex-col overflow-x-hidden">
         <h2 className="text-lg font-semibold ">Communes</h2>
@@ -38,16 +46,6 @@ export default function SidebarNav() {
           )}
         </div>
       </div>
-      <div className="">
-        {user && user?.globalRole?.name === "admin" && (
-          <Link to="/commune/create-commune" className="text-primary underline">
-            <Button variant={"expandIcon"} className="font-semibold">
-              <Plus size={24} className="mr-1 h-4 w-4" />
-              Create Commune
-            </Button>
-          </Link>
-        )}
-      </div>
-    </nav>
+    </>
   );
-}
+};

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { addCommunes } from "@/store/reducers/CommuneReducer";
 import { useEffect, useState } from "react";
