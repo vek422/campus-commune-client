@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Outlet, useParams } from "react-router-dom";
 import PageLayout from "../PageLayout";
 import CommuneSidebarNav from "./Components/CommuneSidebar";
@@ -9,12 +10,10 @@ export default function CommuneLayout() {
   const { fetchCommune } = useFetchCommune(communeId);
   useEffect(() => {
     fetchCommune();
-  }, []);
+  }, [communeId]);
   return (
     <PageLayout sidebar={<CommuneSidebarNav />}>
-      <>
-        <Outlet />
-      </>
+      <Outlet />
     </PageLayout>
   );
 }

@@ -7,11 +7,21 @@ import { useToast } from "../use-toast";
 export const useFetchUserCommunes = () => {
     const { user, token } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
+    const { communes } = useAppSelector(state => state.commune);
+    const communeIds = Object.keys(communes);
+
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
     const fetchCommunes = async () => {
+
         if (!user) return
+        //check if any communeID is missing
+        if (communeIds.length > 0) {
+            const missingCommuneIds = communeIds.filter(id => !communes[id])
+            if (missingCommuneIds.length === 0) return
+        }
         try {
+            console.log("refetching the commune");
             setIsLoading(true);
             const { data, status } = await axios.get(`${BACKEND_BASE_URL}/commune/user/${user._id}`, {
                 headers: {
