@@ -52,9 +52,7 @@ export default function Channel() {
           )}
         </div>
         <div className="fixed bottom-0 right-0 backdrop-blur-sm md:hidden p-5 w-full flex justify-center">
-          <Button variant="default" className="w-full" size={"lg"}>
-            Create Thread
-          </Button>
+          <CreateThread />
         </div>
       </div>
       <div className="hidden md:block w-1/4 h-screen px-10 py-5">
