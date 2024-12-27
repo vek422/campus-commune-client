@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
@@ -13,7 +14,7 @@ export default function InputWithIcon({
   placeholder: string;
   value: string;
   onChange: Dispatch<SetStateAction<string>>;
-  onSubmit: () => void;
+  onSubmit: any;
   Icon: typeof Search;
 }) {
   return (

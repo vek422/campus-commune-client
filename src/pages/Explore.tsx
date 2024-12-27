@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import PageLayout from "./PageLayout";
 import { Loader2, Search } from "lucide-react";
 import { CommuneCard } from "@/components/CommuneCard";
@@ -6,6 +5,7 @@ import { useFetchCommunes } from "@/hooks/api/useFetchCommunes";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Commune } from "@/store/reducers/CommuneReducer";
+import InputWithIcon from "@/components/InputWithIcon";
 
 export default function Explore() {
   const { fetchCommune, hasMore, communes, isLoading, searchCommune } =
@@ -26,22 +26,15 @@ export default function Explore() {
       <div className="w-full flex justify-center flex-col items-center px-4 sm:px-0">
         <form
           onSubmit={handleFormSubmit}
-          className="w-full flex items-center max-h-min"
+          className="w-full flex items-center max-h-min justify-center sm:w-1/2 px-5"
         >
-          <Input
-            placeholder="What are you looking for?"
-            className="w-full"
+          <InputWithIcon
+            Icon={Search}
+            onChange={setSearchString}
             value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
+            placeholder="Search Communes"
+            onSubmit={handleFormSubmit}
           />
-          <Button
-            type="submit"
-            variant={"ghost"}
-            size={"icon"}
-            className="rounded-full -translate-x-10"
-          >
-            <Search className="text-muted-foreground" size={20} />
-          </Button>
         </form>
 
         <div className="w-full h-screen pb-32 items-center sm:items-start flex flex-col sm:flex-row sm:flex-wrap gap-4 sm:gap-8 pt-10 overflow-scroll">

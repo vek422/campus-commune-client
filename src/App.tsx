@@ -11,6 +11,7 @@ import {
 } from "./store/reducers/CommuneReducer.ts";
 import { useAppSelector } from "./store/store.ts";
 import { useRefreshUser } from "./hooks/api/useRefreshUser.ts";
+import { LogoLoading } from "./components/LogoLoading.tsx";
 export default function App() {
   const dispatch = useDispatch();
   const socket = useSocket();
@@ -41,7 +42,7 @@ export default function App() {
   }, [socket?.connected, communesIds, user?._id]);
 
   if (user && isLoading) {
-    return <div>Loading...</div>;
+    return <LogoLoading />;
   }
   return (
     <div>

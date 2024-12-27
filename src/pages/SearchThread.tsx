@@ -14,7 +14,7 @@ export default function SearchThread() {
     <PageLayout>
       <div className="w-full flex items-center flex-col pt-5">
         <form
-          className="w-full b-white sm:w-1/2 flex items-center max-h-min justify-center px-5 "
+          className="w-full sm:w-1/2 flex items-center max-h-min justify-center px-5 "
           onSubmit={(e) => {
             e.preventDefault();
             searchThread(query);

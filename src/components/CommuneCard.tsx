@@ -14,7 +14,7 @@ export function CommuneCard({
   communeId: string;
 }) {
   return (
-    <Card className="w-48 max-h-min flex items-center flex-col p-2 gap-1">
+    <Card className=" w-80 max-h-min flex items-center flex-col p-2 gap-1 sm:w-48">
       <CardHeader className="p-2">
         <img
           src={img}
