@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { ChannelBreadcrumbs } from "./Components/ChannelBreadcrumbs";
 import { useFetchChannel } from "@/hooks/api/useFetchChannel";
 
 import { Thread } from "@/components/Thread/Thread";
@@ -25,7 +24,7 @@ export default function Channel() {
   const { communeId = "", channelId = "" } = useParams();
   const channel = useAppSelector((state) => state.commune.channels[channelId]);
   const threads = useAppSelector((state) => selectThread(state, channelId));
-  const commune = useAppSelector((state) => state.commune.communes[communeId]);
+  // const commune = useAppSelector((state) => state.commune.communes[communeId]);
   const { isLoading, fetchChannel, hasMore } = useFetchChannel({
     communeId,
     channelId,
@@ -36,15 +35,11 @@ export default function Channel() {
   if (isLoading && !threads) return <div>Loading...</div>;
   return (
     <div className="flex ">
-      <div className="flex flex-col h-svh w-3/4">
+      <div className="flex flex-col h-svh md:w-3/4 w-full px-2">
         <div className="h-5">
-          <ChannelBreadcrumbs
-            communeName={commune?.name}
-            communeId={commune?._id}
-            channelName={channel?.name}
-          />
+          <p className="font-semibold text-lg">{channel?.name}</p>
         </div>
-        <div className="pt-5 flex flex-col flex-1 pb-20 gap-5  w-full overflow-scroll transition-all duration-1000">
+        <div className="pt-5 flex flex-col flex-1 pb-40 md:pb-20 gap-5  w-full overflow-scroll ">
           {threads &&
             threads?.map((thread: ThreadType) => {
               return <Thread key={thread._id} thread={thread} />;
@@ -56,8 +51,13 @@ export default function Channel() {
             </Button>
           )}
         </div>
+        <div className="fixed bottom-0 right-0 backdrop-blur-sm md:hidden p-5 w-full flex justify-center">
+          <Button variant="default" className="w-full" size={"lg"}>
+            Create Thread
+          </Button>
+        </div>
       </div>
-      <div className="w-1/4 h-screen px-10 py-5">
+      <div className="hidden md:block w-1/4 h-screen px-10 py-5">
         <CreateThread />
       </div>
     </div>

@@ -18,6 +18,7 @@ import ThreadDropdown from "./ThreadDropdown";
 import { Link } from "react-router-dom";
 import { parseContent } from "@/lib/parseThreadContent";
 import { Thread as ThreadType } from "@/store/reducers/CommuneReducer";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function Thread({
   thread,
@@ -68,9 +69,11 @@ export function Thread({
               {thread?.title}
             </h1>
           </Link>
-          <p className="text-sm font-semibold">
-            {parseContent(thread?.content)}
-          </p>
+          <ScrollArea className="h-32">
+            <p className="text-sm font-semibold">
+              {parseContent(thread?.content)}
+            </p>
+          </ScrollArea>
           <ThreadMedia images={thread?.imagesUri} />
 
           {showContext && (

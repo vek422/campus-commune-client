@@ -12,6 +12,8 @@ import {
 import { useAppSelector } from "./store/store.ts";
 import { useRefreshUser } from "./hooks/api/useRefreshUser.ts";
 import { LogoLoading } from "./components/LogoLoading.tsx";
+import { useToast } from "./hooks/use-toast.ts";
+import { User } from "./store/reducers/authReducer.ts";
 export default function App() {
   const dispatch = useDispatch();
   const socket = useSocket();
@@ -20,10 +22,16 @@ export default function App() {
   );
   const { isLoading } = useRefreshUser();
   const user = useAppSelector((state) => state.auth.user);
+  const { toast } = useToast();
   useEffect(() => {
     if (socket?.connected) {
       socket?.on("new-thread", (thread: Thread, communeId: string) => {
         console.log(`New thread in commune ${communeId}:`, thread);
+        const user = thread.createdBy as User;
+        toast({
+          title: `${user?.firstName} just posted a new thread`,
+          description: `${thread.title}`,
+        });
         dispatch(addThreadFront(thread));
       });
       socket?.on(

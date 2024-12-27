@@ -30,7 +30,9 @@ const ThreadDetail = () => {
       <div className="flex flex-col h-full gap-5 w-full px-5 pt-5">
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-2xl">{thread?.title}</h1>
-          <p className=" w-2/3">{parseContent(thread?.content as string)}</p>
+          <p className=" w-full md:w-2/3 text-justify">
+            {parseContent(thread?.content as string)}
+          </p>
         </div>
         <div>
           <div className="">{<ThreadMedia images={thread?.imagesUri} />}</div>

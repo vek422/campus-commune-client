@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSearchThread } from "@/hooks/api/useSearchThread";
 import { useState } from "react";
 import { Thread } from "@/components/Thread/Thread";
-import FullScreenLoader from "@/components/loader";
+import FullScreenLoader from "@/components/FullScreenLoader";
 import InputWithIcon from "@/components/InputWithIcon";
 
 export default function SearchThread() {

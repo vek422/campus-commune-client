@@ -28,7 +28,7 @@ export const NavItems = () => {
       </div>
       <div className="flex flex-col overflow-x-hidden">
         <h2 className="text-lg font-semibold ">Communes</h2>
-        <div className="overflow-scroll max-h-[20vh] flex flex-col">
+        <div className="overflow-scroll  flex flex-col">
           {isLoading ? (
             <LoaderCircle className="animate-spin" />
           ) : communes ? (
