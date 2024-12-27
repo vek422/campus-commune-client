@@ -62,6 +62,9 @@ export default function CommuneHome() {
             <ScrollArea className="h-32">
               <p className="">{commune?.description}</p>
             </ScrollArea>
+            {!hasJoinedCommune && (
+              <JoinCommune hasJoinedCommune={hasJoinedCommune} />
+            )}
           </div>
         </div>
         <p className="text-md font-semibold p-2">Recent Threads</p>
