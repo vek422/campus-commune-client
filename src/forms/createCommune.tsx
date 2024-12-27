@@ -52,10 +52,7 @@ export const CreateCommuneForm: FC = () => {
     createCommune({
       ...values,
       createdBy: user?._id as string,
-      profileUri:
-        values.profileImage && typeof values.profileImage == typeof File
-          ? values?.profileImage.name
-          : "",
+      profileUri: values.profileImage ? values?.profileImage.name : "",
     });
   };
   const [imagePreview, setImagePreview] = useState<string | null>(null);
