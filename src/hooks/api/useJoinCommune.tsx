@@ -58,7 +58,7 @@ export const useJoinCommune = (commune: Commune) => {
         `${BACKEND_BASE_URL}/commune/leave`,
         {
           userId,
-          communeId,
+          communeId: commune?._id,
         },
         {
           headers: {
@@ -68,7 +68,7 @@ export const useJoinCommune = (commune: Commune) => {
       );
 
       if (status === 200) {
-        dispatch(leaveCommuneReducer(communeId));
+        dispatch(leaveCommuneReducer(commune._id));
         setSuccess(false);
         toast({
           title: "Success",

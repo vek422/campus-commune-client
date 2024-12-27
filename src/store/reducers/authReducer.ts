@@ -52,9 +52,14 @@ const authSlice = createSlice({
     joinCommune: (state, action: PayloadAction<Commune>) => {
       state.user?.communes.push(action.payload)
     },
+
+    //logic might be broken
     leaveCommune: (state, action: PayloadAction<string>) => {
-      if (state.user)
-        state.user.communes.splice(state.user.communes.indexOf(action.payload), 1)
+      if (state.user) {
+        const communeIds = state.user.communes.map((commune) => commune._id)
+        const index = communeIds.indexOf(action.payload)
+        state.user.communes.splice(index, 1)
+      }
     }
   },
 });

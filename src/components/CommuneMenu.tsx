@@ -12,8 +12,8 @@ import { useAppSelector } from "@/store/store";
 import { Link } from "react-router-dom";
 
 export default function CommuneMenu({ communeId }: { communeId: string }) {
-  const { leaveCommune } = useJoinCommune(communeId);
   const commune = useAppSelector((state) => state.commune.communes[communeId]);
+  const { leaveCommune } = useJoinCommune(commune);
   const { user } = useAppSelector((state) => state.auth);
   const isAdmin = commune?.roles[user?._id as string]?.name === "admin";
 
