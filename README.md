@@ -1,50 +1,141 @@
-# React + TypeScript + Vite
+# 🏫 Campus Commune Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive and modern frontend application for the Campus Commune platform, facilitating seamless communication and collaboration among students, faculty, and campus communities. Built with React, TypeScript, and Tailwind CSS, and optimized using Vite for rapid development and deployment.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- **User Authentication**: Secure login and registration functionalities.
+- **Community Forums**: Engage in topic-based discussions and knowledge sharing.
+- **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠️ Tech Stack
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Frontend**: React, TypeScript
+- **Styling**: Tailwind CSS
+- **Bundler**: Vite
+- **Linting**: ESLint
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Steps
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/vek422/campus-commune-client.git
+   cd campus-commune-client
+   ```
+
+2. **Install Dependencies**:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run the Application**:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. **Access the Application**:
+   Open your browser and navigate to `http://localhost:5173` to view the application.
+
+---
+
+## 📚 Usage
+
+This frontend application is designed to work in conjunction with the [Campus Commune Backend](https://github.com/vek422/campus-commune-backend). Ensure the backend is running to enable full functionality.
+
+---
+
+## 🧪 Testing
+
+_Note: Testing is currently not implemented. Plans are in place to add comprehensive unit and integration tests using frameworks like Jest and React Testing Library._
+
+---
+
+## 📁 Project Structure
+
+```plaintext
+campus-commune-client/
+├── public/                 # Static assets
+│   ├── logo.svg
+│   ├── Monteserrat/        # Font files
+│   └── Oswald/             # Font files
+├── src/                    # Source code
+│   ├── assets/             # SVG assets and images
+│   ├── components/         # Reusable UI components
+│   │   ├── Thread/         # Thread-related components
+│   │   ├── Loaders/        # Loading components
+│   │   └── ui/             # Shadcn UI components
+│   ├── config/             # Configuration files
+│   ├── context/            # React context providers
+│   ├── forms/              # Form components
+│   ├── hooks/              # Custom React hooks
+│   │   └── api/            # API-related hooks
+│   ├── lib/                # Utility functions
+│   ├── pages/              # Page components
+│   │   ├── auth/           # Authentication pages
+│   │   └── Commune/        # Commune-related pages
+│   ├── store/              # State management
+│   │   └── reducers/       # Redux reducers
+│   ├── App.tsx             # Root component
+│   ├── main.tsx            # Entry point
+│   └── router.ts           # Application routing
+├── Dockerfile              # Docker configuration
+├── nginx.conf              # Nginx configuration
+├── components.json         # Shadcn UI configuration
+├── package.json            # Dependencies and scripts
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite configuration
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 📸 Application Screenshots
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Login and Registration
+
+![Login Screen](./demo/Screenshot%202025-01-23%20132659.png)
+![Registration](./demo/Screenshot%202025-01-23%20132946.png)
+
+### Home and Feeds
+
+![Home Feed](<./demo/Screenshot%20(52).png>)
+![Thread View](<./demo/Screenshot%20(53).png>)
+
+### Commune Features
+
+![Commune View](<./demo/Screenshot%20(54).png>)
+![Member Management](<./demo/Screenshot%20(57).png>)
+
+### Interactive Elements
+
+![Thread Creation](<./demo/Screenshot%20(58).png>)
+![Navigation Elements](<./demo/Screenshot%20(59).png>)
+![User Profile](<./demo/Screenshot%20(60).png>)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for review. For major changes, open an issue first to discuss proposed modifications.
+
+---
